@@ -1,0 +1,17 @@
+uploads/
+bin/
+target/
+.classpath
+.settings
+.sts4-cache
+.project
+*#
+*.iml
+*.ipr
+*.iws
+*.jar
+*.sw?
+*~
+.#*
+.*.md.html
+.DS_Store
