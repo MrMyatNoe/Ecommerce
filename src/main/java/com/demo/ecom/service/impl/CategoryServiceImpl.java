@@ -50,4 +50,9 @@ public class CategoryServiceImpl implements ICategoryService{
 		
 	}
 
+	@Override
+	public Category findByName(String name) {
+		return catRepo.findByName(name);
+	}
+
 }
