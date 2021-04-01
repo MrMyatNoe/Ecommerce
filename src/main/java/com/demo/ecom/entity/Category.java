@@ -47,4 +47,10 @@ public class Category {
 		this.updated_date = updated_date;
 	}
 
+	@Override
+	public String toString() {
+		return "Category [id=" + id + ", name=" + name + ", created_date=" + created_date + ", updated_date="
+				+ updated_date + "]";
+	}
+
 }
