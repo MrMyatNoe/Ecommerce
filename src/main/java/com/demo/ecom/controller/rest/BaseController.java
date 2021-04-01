@@ -1,4 +1,4 @@
-package com.demo.ecom.controller;
+package com.demo.ecom.controller.rest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

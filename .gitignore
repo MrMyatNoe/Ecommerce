@@ -1,6 +1,6 @@
 uploads/
 bin/
-target/
+target/*
 .classpath
 .settings
 .sts4-cache
