@@ -6,25 +6,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.demo.ecom.entity.Category;
+import com.demo.ecom.exception.AlreadyExistsException;
+import com.demo.ecom.exception.NotFoundException;
 import com.demo.ecom.repository.CategoryRepository;
 import com.demo.ecom.service.ICategoryService;
 
 @Service
-public class CategoryServiceImpl implements ICategoryService{
+public class CategoryServiceImpl implements ICategoryService {
 
 	@Autowired
 	CategoryRepository catRepo;
-	
+
+	/**
+	 * For testing purpose
+	 * 
+	 * @param repo
+	 */
+	public CategoryServiceImpl(CategoryRepository repo) {
+		this.catRepo = repo;
+	}
+
 	@Override
 	public List<Category> getAllDatas() {
 		return catRepo.findAll();
 	}
 
 	@Override
-	public Category saveData(Category t) {
-		t.setCreated_date(System.currentTimeMillis());
-		t.setUpdated_date(t.getCreated_date());
-		return catRepo.save(t);
+	public Category saveData(Category c) {
+		if (existByName(c.getName())) {
+			throw new AlreadyExistsException("Category already exists");
+		}
+		c.setCreated_date(System.currentTimeMillis());
+		c.setUpdated_date(c.getCreated_date());
+		return catRepo.save(c);
 	}
 
 	@Override
@@ -42,17 +56,22 @@ public class CategoryServiceImpl implements ICategoryService{
 
 	@Override
 	public Category getDataById(long id) {
-		try {
-			return catRepo.findById(id).get();
-		} catch (RuntimeException e) {
-			throw new RuntimeException(e.getMessage());
-		}
-		
+//		try {
+//			return catRepo.findById(id).get();
+//		} catch (RuntimeException e) {
+//			throw new RuntimeException(e.getMessage());
+//		}
+		return catRepo.findById(id).orElseThrow(() -> new NotFoundException("Category Not Found!" + id));
+
 	}
 
 	@Override
 	public Category findByName(String name) {
 		return catRepo.findByName(name);
+	}
+	
+	public boolean existByName(String name) {
+		return findByName(name) != null;
 	}
 
 }

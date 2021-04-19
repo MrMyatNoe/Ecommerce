@@ -13,34 +13,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.demo.ecom.entity.Category;
+import com.demo.ecom.entity.Car;
 import com.demo.ecom.exception.DemoBasedException;
-import com.demo.ecom.service.ICategoryService;
+import com.demo.ecom.service.ICarService;
 
 @RestController
-@RequestMapping("/categories")
-public class CategoryController extends BaseController{
+@RequestMapping("/cars")
+public class CarController extends BaseController{
 
 	@Autowired
-	ICategoryService categoryService;
+	ICarService carService;
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public synchronized ResponseEntity<Object> getAllDatas(){
-		logInfo("Get All Categories");
-		return successResponse(categoryService.getAllDatas());
+		logInfo("Get All Cars");
+		return successResponse(carService.getAllDatas());
 	}
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
 	public synchronized ResponseEntity<Object> getDataById(@PathVariable("id") Long id){
-		logInfo("Get Category By Id");
-		return successResponse(categoryService.getDataById(id));
+		logInfo("Get Car By Id");
+		return successResponse(carService.getDataById(id));
 	}
 	
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public synchronized ResponseEntity<Object> saveCategory(@RequestBody Category category){
-		logInfo("save category");
+	public synchronized ResponseEntity<Object> saveCar(@RequestBody Car Car){
+		logInfo("save Car");
 		try {
-			return successResponse(categoryService.saveData(category));
+			return successResponse(carService.saveData(Car));
 		} catch (DemoBasedException e) {
 			logError(e, e.getMessage());
 			return e.response();
@@ -48,10 +48,10 @@ public class CategoryController extends BaseController{
 	}
 	
 	@PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public synchronized ResponseEntity<Object> editCategory(@RequestBody Category category){
-		logInfo("edit category");
+	public synchronized ResponseEntity<Object> editCar(@RequestBody Car car){
+		logInfo("edit car");
 		try {
-			return successResponse(categoryService.updateData(category));
+			return successResponse(carService.updateData(car));
 		} catch (DemoBasedException e) {
 			logError(e, e.getMessage());
 			return e.response();
@@ -59,10 +59,10 @@ public class CategoryController extends BaseController{
 	}
 	
 	@DeleteMapping()
-	public synchronized ResponseEntity<Object> deleteCategory(@RequestParam(name = "id") long id){
-		logInfo("delete category");
+	public synchronized ResponseEntity<Object> deleteCar(@RequestParam(name = "id") long id){
+		logInfo("delete car");
 		try {
-			categoryService.deleteById(id);
+			carService.deleteById(id);
 			return deleteSuccessResponse("Delete successful");
 		} catch (DemoBasedException e) {
 			logError(e, e.getMessage());

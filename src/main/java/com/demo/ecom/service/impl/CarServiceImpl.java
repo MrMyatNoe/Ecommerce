@@ -15,7 +15,7 @@ public class CarServiceImpl implements ICarService {
 
 	@Autowired
 	CarRepository carRepo;
-	
+
 	@Override
 	public List<Car> getAllDatas() {
 		return carRepo.findAll();
@@ -43,10 +43,10 @@ public class CarServiceImpl implements ICarService {
 
 	@Override
 	public Car getDataById(long id) {
-		Car car = carRepo.findById(id).get();
-		if (car == null) 
-			throw new NotFoundException("Car is not found "  + id);
-		return car;
+//		Car car = carRepo.findById(id).get();
+//		if (car == null) 
+//			throw new NotFoundException("Car is not found "  + id);
+		return carRepo.findById(id).orElseThrow(() -> new NotFoundException("Car is not found " + id));
 	}
 
 }

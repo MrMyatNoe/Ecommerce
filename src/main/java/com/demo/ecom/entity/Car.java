@@ -15,8 +15,7 @@ public class Car {
 	private String name;
 	private String modelYear;
 	private Long startedDate;
-	// TODO
-	// private String photo;
+	private String photo;
 	private String color;
 	private String taxiNo;
 	private String licenseDate;
@@ -101,6 +100,14 @@ public class Car {
 
 	public void setUpdated_date(Long updated_date) {
 		this.updated_date = updated_date;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}
 
 }
