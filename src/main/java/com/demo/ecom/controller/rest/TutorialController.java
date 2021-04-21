@@ -39,50 +39,23 @@ public class TutorialController extends BaseController {
 			@RequestParam (name = "page")int page, @RequestParam(name = "size") int size) {
 		try {
 			logInfo("Get All Tutorials By title or Page And Size");
-			Page<Tutorial> pageTuts = tutoService.getDatasByPageAndSize(page, size);
+			Page<Tutorial> pageTuts;
+			if (title == null)
+				pageTuts = tutoService.getDatasByPageAndSize(page, size);
+			else
+				pageTuts = tutoService.getDatasByTitlePageSize(title, page, size);
+			
 			Map<String, Object> response = new HashMap<>();
 			response.put("tutorials", pageTuts.getContent());
 			response.put("currentPage", pageTuts.getNumber());
 			response.put("totalItems", pageTuts.getTotalElements());
 			response.put("totalPages", pageTuts.getTotalPages());
-			System.out.println(response);
 			return successResponse(response);
 		} catch (DemoBasedException e) {
 			logError(e, e.getMessage());
 			return e.response();
 		}
 	}
-
-//	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-//	public synchronized ResponseEntity<Object> getDatasByPageAndSize(
-//			@RequestParam(required = false) String title,
-//			@RequestParam(defaultValue = "0") int page,
-//			@RequestParam(defaultValue = "3") int size){
-//		try {
-//			logInfo("Get All Tutorials By Page And Size");
-//			List<Tutorial> tutorials = new ArrayList<Tutorial>();
-//			Pageable paging = PageRequest.of(page, size);
-//			System.out.println(paging);
-//			
-//			Page<Tutorial> pageTuts;
-//			if(title == null)
-//				pageTuts = tutoService.getDatasByPageAndSize(paging);
-//			else
-//				pageTuts = tutoService.getDatasByTitleAndPaging(title,paging);
-//			
-//			tutorials = pageTuts.getContent();
-//			
-//			Map<String,Object> response = new HashMap<>();
-//			response.put("tutorials", tutorials);
-//			response.put("currentPage", pageTuts.getNumber());
-//			response.put("totalItems", pageTuts.getTotalElements());
-//			response.put("totalPages", pageTuts.getTotalPages());
-//			return successResponse(response);
-//		} catch (DemoBasedException e) {
-//			logError(e, e.getMessage());
-//			return e.response();
-//		}
-//	}
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
 	public synchronized ResponseEntity<Object> getDataById(@PathVariable("id") Long id) {
@@ -117,10 +90,24 @@ public class TutorialController extends BaseController {
 		logInfo("delete category");
 		try {
 			tutoService.deleteById(id);
-			return deleteSuccessResponse("Delete successful");
+			Map<String, Object> response = new HashMap<>();
+			response.put("response", "Delete Successful");
+			return deleteSuccessResponse(response);
 		} catch (DemoBasedException e) {
 			logError(e, e.getMessage());
 			return e.response();
 		}
+	}
+	
+	@GetMapping(path = "/published")
+	public synchronized ResponseEntity<Object> getPublishedCounts(){
+		logInfo("Published Count");
+		return successResponse(tutoService.getPublishedCounts());
+	}
+	
+	@GetMapping(path = "/pending")
+	public synchronized ResponseEntity<Object> getPendingCounts(){
+		logInfo("Pending Count");
+		return successResponse(tutoService.getPendingCounts());
 	}
 }

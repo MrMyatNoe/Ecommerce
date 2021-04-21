@@ -13,6 +13,7 @@ public class Tutorial {
 	private long id;
 	private String title;
 	private String description;
+	private boolean published;
 	private long created_date;
 	private long updated_date;
 
@@ -38,6 +39,14 @@ public class Tutorial {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public boolean isPublished() {
+		return published;
+	}
+
+	public void setPublished(boolean published) {
+		this.published = published;
 	}
 
 	public long getCreated_date() {

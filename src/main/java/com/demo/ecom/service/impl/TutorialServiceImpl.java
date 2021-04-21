@@ -30,10 +30,16 @@ public class TutorialServiceImpl implements ITutorialService {
 	}
 
 	@Override
+	public Page<Tutorial> getDatasByTitlePageSize(String title, int page, int size) {
+		return tutoRepo.findByTitleContaining(title, PageRequest.of(page, size));
+	}
+	
+	@Override
 	public Tutorial saveData(Tutorial t) {
 		if (existByTitle(t.getTitle())) {
 			throw new AlreadyExistsException("Tutorial already exists");
 		}
+		t.setPublished(false);
 		t.setCreated_date(System.currentTimeMillis());
 		t.setUpdated_date(t.getCreated_date());
 		return tutoRepo.save(t);
@@ -67,4 +73,15 @@ public class TutorialServiceImpl implements ITutorialService {
 		return findByTitle(title) != null;
 	}
 
+	@Override
+	public Long getPublishedCounts() {
+		return tutoRepo.getPublishedCounts();
+	}
+
+	@Override
+	public Long getPendingCounts() {
+		System.out.println(tutoRepo.getPendingCounts());
+		return tutoRepo.getPendingCounts();
+	}
+	
 }
