@@ -5,3 +5,5 @@ Backend Project for Car Management System, including CRUD operations and unit te
 First You must install java 8 in your machine
 
 After cloning ,run maven install
+
+You can check localhost:8080/swagger-ui.html
