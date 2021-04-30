@@ -21,8 +21,12 @@ import com.demo.ecom.entity.Tutorial;
 import com.demo.ecom.exception.DemoBasedException;
 import com.demo.ecom.service.ITutorialService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
-@RequestMapping("/tutorials")
+@RequestMapping("/v1/tutorials")
 public class TutorialController extends BaseController {
 
 	@Autowired
@@ -34,8 +38,15 @@ public class TutorialController extends BaseController {
 //		return successResponse(tutoService.getAllDatas());
 //	}
 
+	@ApiOperation(value = "Get All Tutorials",response = Iterable.class, tags = "getTutotrialsByPageAndSize")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Success"),
+			@ApiResponse(code = 401, message = "not authorized!"),
+			@ApiResponse(code = 403, message = "forbidden!!"),
+			@ApiResponse(code = 404, message = "not found!!")
+	})
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public synchronized ResponseEntity<Object> getDatasByPageAndSize(@RequestParam(required = false) String title,
+	public synchronized ResponseEntity<Object> getTutotrialsByPageAndSize(@RequestParam(required = false) String title,
 			@RequestParam (name = "page")int page, @RequestParam(name = "size") int size) {
 		try {
 			logInfo("Get All Tutorials By title or Page And Size");
@@ -57,12 +68,26 @@ public class TutorialController extends BaseController {
 		}
 	}
 
+	@ApiOperation(value = "Get Tutorial by Id",response = Tutorial.class, tags = "getTutorialById")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Success"),
+			@ApiResponse(code = 401, message = "not authorized!"),
+			@ApiResponse(code = 403, message = "forbidden!!"),
+			@ApiResponse(code = 404, message = "not found!!")
+	})
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
-	public synchronized ResponseEntity<Object> getDataById(@PathVariable("id") Long id) {
+	public synchronized ResponseEntity<Object> getTutorialById(@PathVariable("id") Long id) {
 		logInfo("Get Tutorial By Id");
 		return successResponse(tutoService.getDataById(id));
 	}
 
+	@ApiOperation(value = "Save Tutorial",response = Tutorial.class, tags = "saveTutorial")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Success"),
+			@ApiResponse(code = 401, message = "not authorized!"),
+			@ApiResponse(code = 403, message = "forbidden!!"),
+			@ApiResponse(code = 404, message = "not found!!")
+	})
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public synchronized ResponseEntity<Object> saveTutorial(@RequestBody Tutorial tutorial) {
 		logInfo("save tutorial");
@@ -74,9 +99,16 @@ public class TutorialController extends BaseController {
 		}
 	}
 
+	@ApiOperation(value = "Update Tutorial",response = Tutorial.class, tags = "updateTutorial")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Success"),
+			@ApiResponse(code = 401, message = "not authorized!"),
+			@ApiResponse(code = 403, message = "forbidden!!"),
+			@ApiResponse(code = 404, message = "not found!!")
+	})
 	@PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public synchronized ResponseEntity<Object> editCategory(@RequestBody Tutorial tutorial) {
-		logInfo("edit category");
+	public synchronized ResponseEntity<Object> updateTutorial(@RequestBody Tutorial tutorial) {
+		logInfo("edit tutorial");
 		try {
 			return successResponse(tutoService.updateData(tutorial));
 		} catch (DemoBasedException e) {
@@ -85,8 +117,16 @@ public class TutorialController extends BaseController {
 		}
 	}
 
-	@DeleteMapping()
-	public synchronized ResponseEntity<Object> deleteCategory(@RequestParam(name = "id") long id) {
+	@ApiOperation(value = "Delete Tutorial",response = String.class, tags = "deleteTutorial")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Success"),
+			@ApiResponse(code = 401, message = "not authorized!"),
+			@ApiResponse(code = 403, message = "forbidden!!"),
+			@ApiResponse(code = 404, message = "not found!!")
+	})
+	
+	@DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public synchronized ResponseEntity<Object> deleteTutorial(@RequestParam(name = "id") long id) {
 		logInfo("delete category");
 		try {
 			tutoService.deleteById(id);

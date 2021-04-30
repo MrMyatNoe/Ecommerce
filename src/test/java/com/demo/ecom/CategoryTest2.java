@@ -18,7 +18,7 @@ class CategoryTest2 {
 
 	@Autowired
 	CategoryRepository repo;
-	
+
 	@BeforeEach
 	void setUp() throws Exception {
 	}
@@ -32,4 +32,5 @@ class CategoryTest2 {
 		repo.save(c);
 		assertNotNull(c);
 	}
+
 }

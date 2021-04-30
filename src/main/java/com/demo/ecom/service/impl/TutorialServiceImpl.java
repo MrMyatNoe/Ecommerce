@@ -36,9 +36,15 @@ public class TutorialServiceImpl implements ITutorialService {
 	
 	@Override
 	public Tutorial saveData(Tutorial t) {
-		if (existByTitle(t.getTitle())) {
+		if(t.getTitle() == null || t.getTitle().equals("") || t.getTitle().isEmpty())
+			throw new NullPointerException("Title is null");
+		
+		if(t.getDescription() == null || t.getDescription().equals("") || t.getDescription().isEmpty())
+			throw new NullPointerException("Description is null");
+		
+		if (existByTitle(t.getTitle()))
 			throw new AlreadyExistsException("Tutorial already exists");
-		}
+	
 		t.setPublished(false);
 		t.setCreated_date(System.currentTimeMillis());
 		t.setUpdated_date(t.getCreated_date());

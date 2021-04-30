@@ -18,7 +18,7 @@ import com.demo.ecom.exception.DemoBasedException;
 import com.demo.ecom.service.ICarService;
 
 @RestController
-@RequestMapping("/cars")
+@RequestMapping("/api/cars")
 public class CarController extends BaseController{
 
 	@Autowired
@@ -58,7 +58,7 @@ public class CarController extends BaseController{
 		}
 	}
 	
-	@DeleteMapping()
+	@DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public synchronized ResponseEntity<Object> deleteCar(@RequestParam(name = "id") long id){
 		logInfo("delete car");
 		try {

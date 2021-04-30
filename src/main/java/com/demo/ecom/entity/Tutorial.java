@@ -5,13 +5,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
 public class Tutorial {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	@ApiModelProperty(notes = "title of tutorial" ,name = "title", required = true )
 	private String title;
+	@ApiModelProperty(notes = "description of tutorial" ,name = "description", required = true )
 	private String description;
 	private boolean published;
 	private long created_date;
