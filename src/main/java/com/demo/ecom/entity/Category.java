@@ -5,7 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import io.swagger.annotations.ApiModel;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.swagger.annotations.ApiModelProperty;
 
 @Entity
@@ -16,7 +17,9 @@ public class Category {
 	private long id;
 	@ApiModelProperty(notes = "name of category" ,name = "name", required = true )
 	private String name;
+	@JsonIgnore
 	private long created_date;
+	@JsonIgnore
 	private long updated_date;
 
 	public long getId() {

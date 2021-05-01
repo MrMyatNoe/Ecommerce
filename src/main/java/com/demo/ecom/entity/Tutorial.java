@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.swagger.annotations.ApiModelProperty;
 
 @Entity
@@ -18,7 +20,9 @@ public class Tutorial {
 	@ApiModelProperty(notes = "description of tutorial" ,name = "description", required = true )
 	private String description;
 	private boolean published;
+	@JsonIgnore
 	private long created_date;
+	@JsonIgnore
 	private long updated_date;
 
 	public long getId() {

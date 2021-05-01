@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Car {
 
@@ -19,7 +21,9 @@ public class Car {
 	private String color;
 	private String taxiNo;
 	private String licenseDate;
+	@JsonIgnore
 	private Long created_date;
+	@JsonIgnore
 	private Long updated_date;
 
 	public Long getId() {

@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Driver {
 
@@ -17,6 +19,10 @@ public class Driver {
 	private String address;
 	private String phone;
 	private String imageName;
+	@JsonIgnore
+	private long created_date;
+	@JsonIgnore
+	private long updated_date;
 
 	public Long getId() {
 		return id;
@@ -74,10 +80,27 @@ public class Driver {
 		this.imageName = imageName;
 	}
 
+	public long getCreated_date() {
+		return created_date;
+	}
+
+	public void setCreated_date(long created_date) {
+		this.created_date = created_date;
+	}
+
+	public long getUpdated_date() {
+		return updated_date;
+	}
+
+	public void setUpdated_date(long updated_date) {
+		this.updated_date = updated_date;
+	}
+
 	@Override
 	public String toString() {
 		return "Driver [id=" + id + ", name=" + name + ", nrc=" + nrc + ", licenseNo=" + licenseNo + ", address="
-				+ address + ", phone=" + phone + ", imageName=" + imageName + "]";
+				+ address + ", phone=" + phone + ", imageName=" + imageName + ", created_date=" + created_date
+				+ ", updated_date=" + updated_date + "]";
 	}
 
 }
