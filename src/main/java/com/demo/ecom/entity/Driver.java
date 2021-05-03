@@ -15,7 +15,8 @@ public class Driver {
 	private Long id;
 	private String name;
 	private String nrc;
-	private String licenseNo;
+	private String license;
+	private String gender;
 	private String address;
 	private String phone;
 	private String imageName;
@@ -48,12 +49,20 @@ public class Driver {
 		this.nrc = nrc;
 	}
 
-	public String getLicenseNo() {
-		return licenseNo;
+	public String getGender() {
+		return gender;
 	}
 
-	public void setLicenseNo(String licenseNo) {
-		this.licenseNo = licenseNo;
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getLicense() {
+		return license;
+	}
+
+	public void setLicense(String license) {
+		this.license = license;
 	}
 
 	public String getAddress() {
@@ -98,9 +107,9 @@ public class Driver {
 
 	@Override
 	public String toString() {
-		return "Driver [id=" + id + ", name=" + name + ", nrc=" + nrc + ", licenseNo=" + licenseNo + ", address="
-				+ address + ", phone=" + phone + ", imageName=" + imageName + ", created_date=" + created_date
-				+ ", updated_date=" + updated_date + "]";
+		return "Driver [id=" + id + ", name=" + name + ", nrc=" + nrc + ", gender=" + gender + ", license=" + license
+				+ ", address=" + address + ", phone=" + phone + ", imageName=" + imageName + ", created_date="
+				+ created_date + ", updated_date=" + updated_date + "]";
 	}
 
 }

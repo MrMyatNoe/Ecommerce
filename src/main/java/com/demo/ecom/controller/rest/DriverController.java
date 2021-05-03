@@ -32,6 +32,8 @@ public class DriverController extends BaseController {
 
 	@Autowired
 	ServletContext context;
+	
+	private static final String path = "/home/tmn/public/Ecom/Images";
 
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public synchronized ResponseEntity<Object> saveDriver(@RequestParam("file") MultipartFile file,
@@ -39,14 +41,15 @@ public class DriverController extends BaseController {
 			throws JsonMappingException, JsonProcessingException, DemoBasedException {
 		try {
 			Driver d = new ObjectMapper().readValue(driver, Driver.class);
-			boolean pathExists = new File(context.getRealPath("/Images")).exists();
+			boolean pathExists = new File(path+ "/Drivers").exists();
 			if (!pathExists) {
-				new File(context.getRealPath("/Images")).mkdir();
+				new File(path+ "/Drivers").mkdir();
 			}
 			String originalFileName = file.getOriginalFilename();
 			String newFileName = FilenameUtils.getBaseName(originalFileName) + "."
 					+ FilenameUtils.getExtension(originalFileName);
-			File serverFile = new File(context.getRealPath("/Images/") + File.separator + newFileName);
+			File serverFile = new File(context.getRealPath(path+ "/Drivers") + File.separator + newFileName);
+			System.out.println("Server File :"+serverFile) ;
 			try {
 				FileUtils.writeByteArrayToFile(serverFile, file.getBytes());
 			} catch (IOException e) {

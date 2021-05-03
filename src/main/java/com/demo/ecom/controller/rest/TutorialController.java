@@ -124,7 +124,6 @@ public class TutorialController extends BaseController {
 			@ApiResponse(code = 403, message = "forbidden!!"),
 			@ApiResponse(code = 404, message = "not found!!")
 	})
-	
 	@DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public synchronized ResponseEntity<Object> deleteTutorial(@RequestParam(name = "id") long id) {
 		logInfo("delete category");
@@ -139,12 +138,26 @@ public class TutorialController extends BaseController {
 		}
 	}
 	
+	@ApiOperation(value = "Get Tutorial Published",response = Tutorial.class, tags = "Get Published Tutorial")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Success"),
+			@ApiResponse(code = 401, message = "not authorized!"),
+			@ApiResponse(code = 403, message = "forbidden!!"),
+			@ApiResponse(code = 404, message = "not found!!")
+	})
 	@GetMapping(path = "/published")
 	public synchronized ResponseEntity<Object> getPublishedCounts(){
 		logInfo("Published Count");
 		return successResponse(tutoService.getPublishedCounts());
 	}
 	
+	@ApiOperation(value = "Get Tutorial Pending",response = Tutorial.class, tags = "Get Pending Tutorial")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Success"),
+			@ApiResponse(code = 401, message = "not authorized!"),
+			@ApiResponse(code = 403, message = "forbidden!!"),
+			@ApiResponse(code = 404, message = "not found!!")
+	})
 	@GetMapping(path = "/pending")
 	public synchronized ResponseEntity<Object> getPendingCounts(){
 		logInfo("Pending Count");
