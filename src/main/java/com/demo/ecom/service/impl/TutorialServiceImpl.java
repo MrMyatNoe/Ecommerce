@@ -86,7 +86,6 @@ public class TutorialServiceImpl implements ITutorialService {
 
 	@Override
 	public Long getPendingCounts() {
-		System.out.println(tutoRepo.getPendingCounts());
 		return tutoRepo.getPendingCounts();
 	}
 	

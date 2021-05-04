@@ -6,15 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.demo.ecom.entity.Driver;
+import com.demo.ecom.exception.FormatException;
 import com.demo.ecom.repository.DriverRepository;
 import com.demo.ecom.service.IDriverService;
 
 @Service
 public class DriverServiceImpl implements IDriverService {
 
+	private static final String NRC_REGEX = "\\b([1-9]|1[0-4])[/](Ka|Kh|Ga|Gh|Ng|Ca|Ch|Ja|Jh|Ny|Dd|Nn|Ta|Th|Da|Dh|Na|Pa|Ph|Ba|Bh|Ma|Ya|Ra|La|Wa|Sa|Ha|Ll|u|E|Ah){3}[/](C|AC|NC|V|M|N)[/]\\d{6}\\b\\$";
+	private static final String LICENSE_REGEX = "\\b([A-E][/]\\d{5}[/]\\d{2})\\b";
+
 	@Autowired
 	DriverRepository driverRepo;
-	
+
 	@Override
 	public List<Driver> getAllDatas() {
 		// TODO Auto-generated method stub
@@ -23,6 +27,13 @@ public class DriverServiceImpl implements IDriverService {
 
 	@Override
 	public Driver saveData(Driver d) {
+		System.out.println(d.getNrc());
+		if (!d.getNrc().equals(NRC_REGEX)) {
+			throw new FormatException("Please Check your NRC number");
+		}
+		if (!d.getLicense().equals(LICENSE_REGEX)) {
+			throw new FormatException("Please Check your License number");
+		}
 		return driverRepo.save(d);
 	}
 
