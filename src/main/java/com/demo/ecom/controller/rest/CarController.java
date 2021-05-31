@@ -18,7 +18,7 @@ import com.demo.ecom.exception.DemoBasedException;
 import com.demo.ecom.service.ICarService;
 
 @RestController
-@RequestMapping("/api/cars")
+@RequestMapping("/v1/cars")
 public class CarController extends BaseController{
 
 	@Autowired

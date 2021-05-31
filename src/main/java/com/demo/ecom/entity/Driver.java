@@ -1,11 +1,15 @@
 package com.demo.ecom.entity;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
 
 @Entity
 public class Driver {
@@ -13,15 +17,33 @@ public class Driver {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@NotNull
 	private String name;
+
+	@NotNull
 	private String nrc;
+
+	@NotNull
 	private String license;
+
+	@NotNull
 	private String gender;
+
+	@NotNull
 	private String address;
+
+	@NotNull
 	private String phone;
 	private String imageName;
+
+	@OneToMany(mappedBy = "driver")
+	@JsonIgnore
+	private List<DailyTransaction> dailyList;
+
 	@JsonIgnore
 	private long created_date;
+
 	@JsonIgnore
 	private long updated_date;
 
@@ -105,11 +127,19 @@ public class Driver {
 		this.updated_date = updated_date;
 	}
 
+	public List<DailyTransaction> getDailyList() {
+		return dailyList;
+	}
+
+	public void setDailyList(List<DailyTransaction> dailyList) {
+		this.dailyList = dailyList;
+	}
+
 	@Override
 	public String toString() {
 		return "Driver [id=" + id + ", name=" + name + ", nrc=" + nrc + ", gender=" + gender + ", license=" + license
 				+ ", address=" + address + ", phone=" + phone + ", imageName=" + imageName + ", created_date="
-				+ created_date + ", updated_date=" + updated_date + "]";
+				+ created_date + ", updated_date=" + updated_date + ", dailyList=" + dailyList + "]";
 	}
 
 }

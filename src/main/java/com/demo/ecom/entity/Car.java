@@ -1,11 +1,15 @@
 package com.demo.ecom.entity;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
 
 @Entity
 public class Car {
@@ -13,16 +17,36 @@ public class Car {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@NotNull
 	private String carNo;
+
+	@NotNull
 	private String name;
+
+	@NotNull
 	private String modelYear;
+
+	@NotNull
 	private Long startedDate;
+
 	private String photo;
+
+	@NotNull
 	private String color;
+
 	private String taxiNo;
+
+	@NotNull
 	private String licenseDate;
+
+	@OneToMany(mappedBy = "car")
+	@JsonIgnore
+	private List<DailyTransaction> dailyList;
+	
 	@JsonIgnore
 	private Long created_date;
+
 	@JsonIgnore
 	private Long updated_date;
 
@@ -112,6 +136,22 @@ public class Car {
 
 	public void setPhoto(String photo) {
 		this.photo = photo;
+	}
+
+	public List<DailyTransaction> getDailyList() {
+		return dailyList;
+	}
+
+	public void setDailyList(List<DailyTransaction> dailyList) {
+		this.dailyList = dailyList;
+	}
+
+	@Override
+	public String toString() {
+		return "Car [id=" + id + ", carNo=" + carNo + ", name=" + name + ", modelYear=" + modelYear + ", startedDate="
+				+ startedDate + ", photo=" + photo + ", color=" + color + ", taxiNo=" + taxiNo + ", licenseDate="
+				+ licenseDate + ", dailyList=" + dailyList + ", created_date=" + created_date + ", updated_date="
+				+ updated_date + "]";
 	}
 
 }
