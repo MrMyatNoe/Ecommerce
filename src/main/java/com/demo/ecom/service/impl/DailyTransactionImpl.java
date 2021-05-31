@@ -22,8 +22,7 @@ public class DailyTransactionImpl implements IDailyTransactionService {
 	
 	@Override
 	public List<DailyTransaction> getAllDatas() {
-		// TODO Auto-generated method stub
-		return null;
+		return dailyTransRepo.findAll();
 	}
 
 	@Override
