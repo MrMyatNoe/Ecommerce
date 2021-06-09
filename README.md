@@ -2,7 +2,7 @@
 
 Backend Project for Car Management System, including CRUD operations and unit test cases, Mockito Test case
 
-First You must install java 8 in your machine
+First You must install java 8 on your pc
 
 After cloning ,run maven install
 
