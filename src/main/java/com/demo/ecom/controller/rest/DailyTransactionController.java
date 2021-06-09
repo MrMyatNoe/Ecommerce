@@ -3,6 +3,7 @@ package com.demo.ecom.controller.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,7 @@ public class DailyTransactionController extends BaseController{
 	IDriverService driverService;
 	
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> saveTransaction(@RequestBody DailyTransactionRequest request){
+	public synchronized ResponseEntity<Object> saveTransaction(@RequestBody DailyTransactionRequest request){
 		logInfo("save transaction" + request);
 		try {
 			DailyTransaction dt = new DailyTransaction(request);
@@ -46,5 +47,11 @@ public class DailyTransactionController extends BaseController{
 		}
 		
 	}
+	
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public synchronized ResponseEntity<Object> getAllDatas(){
+		return successResponse(dailyTransactionService.getAllDatas());
+	}
+	
 
 }
