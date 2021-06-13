@@ -3,14 +3,10 @@ package com.demo.ecom.controller.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,10 +32,7 @@ public class CategoryController extends BaseController{
 			@ApiResponse(code = 403, message = "forbidden!!"),
 			@ApiResponse(code = 404, message = "not found!!")
 	})
-	
-	
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasRole('ADMIN')")
+	@RequestMapping(method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_VALUE)
 	public synchronized ResponseEntity<Object> getAllCategories(){
 		logInfo("Get All Categories");
 		return successResponse(categoryService.getAllDatas());
@@ -52,7 +45,8 @@ public class CategoryController extends BaseController{
 			@ApiResponse(code = 403, message = "forbidden!!"),
 			@ApiResponse(code = 404, message = "not found!!")
 	})
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
+	@RequestMapping(method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
+	//@PreAuthorize("hasRole('ADMIN')")
 	public synchronized ResponseEntity<Object> getCategoryById(@PathVariable("id") Long id){
 		logInfo("Get Category By Id");
 		return successResponse(categoryService.getDataById(id));
@@ -65,7 +59,8 @@ public class CategoryController extends BaseController{
 			@ApiResponse(code = 403, message = "forbidden!!"),
 			@ApiResponse(code = 404, message = "not found!!")
 	})
-	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.POST ,produces = MediaType.APPLICATION_JSON_VALUE)
+	//@PreAuthorize("hasRole('ADMIN')")
 	public synchronized ResponseEntity<Object> saveCategory(@RequestBody Category category){
 		logInfo("save category");
 		try {
@@ -83,7 +78,8 @@ public class CategoryController extends BaseController{
 			@ApiResponse(code = 403, message = "forbidden!!"),
 			@ApiResponse(code = 404, message = "not found!!")
 	})
-	@PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.PUT ,produces = MediaType.APPLICATION_JSON_VALUE)
+	//@PreAuthorize("hasRole('ADMIN')")
 	public synchronized ResponseEntity<Object> updateCategory(@RequestBody Category category){
 		logInfo("edit category");
 		try {
@@ -101,7 +97,8 @@ public class CategoryController extends BaseController{
 			@ApiResponse(code = 403, message = "forbidden!!"),
 			@ApiResponse(code = 404, message = "not found!!")
 	})
-	@DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.DELETE ,produces = MediaType.APPLICATION_JSON_VALUE)
+	//@PreAuthorize("hasRole('ADMIN')")
 	public synchronized ResponseEntity<Object> deleteCategoryById(@RequestParam(name = "id") long id){
 		logInfo("delete category");
 		try {

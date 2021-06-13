@@ -9,7 +9,7 @@ public enum ApplicationUserPermission {
 	ADMIN_READ("admin:read"),
 	ADMIN_WRITE("admin:write"),
 	DRIVER_READ("student:read"),
-	DRIVER_WRITE("student:wrire");
+	DRIVER_WRITE("student:write");
 
 	private final String permission;
 	

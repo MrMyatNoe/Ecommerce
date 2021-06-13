@@ -3,13 +3,10 @@ package com.demo.ecom.controller.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,19 +21,19 @@ public class CarController extends BaseController{
 	@Autowired
 	ICarService carService;
 	
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public synchronized ResponseEntity<Object> getAllDatas(){
 		logInfo("Get All Cars");
 		return successResponse(carService.getAllDatas());
 	}
 	
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
+	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
 	public synchronized ResponseEntity<Object> getDataById(@PathVariable("id") Long id){
 		logInfo("Get Car By Id");
 		return successResponse(carService.getDataById(id));
 	}
 	
-	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
 	public synchronized ResponseEntity<Object> saveCar(@RequestBody Car Car){
 		logInfo("save Car");
 		try {
@@ -47,7 +44,7 @@ public class CarController extends BaseController{
 		}
 	}
 	
-	@PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	public synchronized ResponseEntity<Object> editCar(@RequestBody Car car){
 		logInfo("edit car");
 		try {
@@ -58,7 +55,7 @@ public class CarController extends BaseController{
 		}
 	}
 	
-	@DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.DELETE,produces = MediaType.APPLICATION_JSON_VALUE)
 	public synchronized ResponseEntity<Object> deleteCar(@RequestParam(name = "id") long id){
 		logInfo("delete car");
 		try {
