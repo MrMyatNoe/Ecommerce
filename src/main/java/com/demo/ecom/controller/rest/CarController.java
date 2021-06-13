@@ -27,7 +27,7 @@ public class CarController extends BaseController{
 		return successResponse(carService.getAllDatas());
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
+	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, path = "/{id}")
 	public synchronized ResponseEntity<Object> getDataById(@PathVariable("id") Long id){
 		logInfo("Get Car By Id");
 		return successResponse(carService.getDataById(id));
