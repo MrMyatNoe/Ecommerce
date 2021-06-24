@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.demo.ecom.entity.Driver;
 import com.demo.ecom.exception.DemoBasedException;
 import com.demo.ecom.service.IDriverService;
+import com.demo.ecom.service.impl.DriverServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,6 +33,8 @@ public class DriverController extends BaseController {
 
 	@Autowired
 	ServletContext context;
+	
+	DriverServiceImpl impl = new DriverServiceImpl();
 	
 	private static final String path = "/home/tmn/public/Ecommerce/Images";
 
@@ -67,6 +70,11 @@ public class DriverController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> getAllDatas(){
 		return successResponse(driverService.getAllDatas());
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> deleteAllDatas(){
+		return deleteSuccessResponse(impl.delete());
 	}
 	
 }

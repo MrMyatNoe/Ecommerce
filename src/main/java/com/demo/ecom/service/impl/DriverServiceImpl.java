@@ -56,5 +56,10 @@ public class DriverServiceImpl implements IDriverService {
 	public Driver getDataById(long id) {
 		return driverRepo.findById(id).orElseThrow(() -> new NotFoundException("Driver Id not found!"));
 	}
+	
+	public String delete() {
+		this.driverRepo.deleteAll();
+		return "delete successful";
+	}
 
 }

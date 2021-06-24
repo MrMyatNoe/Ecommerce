@@ -115,7 +115,7 @@ public class TutorialController extends BaseController {
 		try {
 			tutoService.deleteById(id);
 			Map<String, Object> response = new HashMap<>();
-			response.put("response", "Delete Successful");
+			response.put("message", "Delete Successful");
 			return deleteSuccessResponse(response);
 		} catch (DemoBasedException e) {
 			logError(e, e.getMessage());
