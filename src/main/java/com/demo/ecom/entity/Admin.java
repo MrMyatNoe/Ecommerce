@@ -1,14 +1,13 @@
 package com.demo.ecom.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-
+import javax.persistence.ManyToOne;
 import com.demo.ecom.request.AdminRequest;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Admin {
@@ -23,9 +22,14 @@ public class Admin {
 	private String address;
 	private String gender;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "role_id",referencedColumnName = "id")
+	@ManyToOne
+	@JoinColumn(name = "role_id",nullable = false)
 	private Role role;
+	@JsonIgnore
+	private long created_date;
+
+	@JsonIgnore
+	private long updated_date;
 	
 	public Admin() {
 	}
@@ -102,11 +106,28 @@ public class Admin {
 	public void setRole(Role role) {
 		this.role = role;
 	}
+	
+	public long getCreated_date() {
+		return created_date;
+	}
+
+	public void setCreated_date(long created_date) {
+		this.created_date = created_date;
+	}
+
+	public long getUpdated_date() {
+		return updated_date;
+	}
+
+	public void setUpdated_date(long updated_date) {
+		this.updated_date = updated_date;
+	}
 
 	@Override
 	public String toString() {
 		return "Admin [id=" + id + ", name=" + name + ", phone=" + phone + ", email=" + email + ", password=" + password
-				+ ", address=" + address + ", gender=" + gender + ", role=" + role + "]";
+				+ ", address=" + address + ", gender=" + gender + ", created_date=" + created_date
+				+ ", updated_date=" + updated_date + "]";
 	}
-	
+
 }

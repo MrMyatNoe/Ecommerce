@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.demo.ecom.entity.Admin;
+import com.demo.ecom.exception.NotFoundException;
 import com.demo.ecom.repository.AdminRespostiory;
 import com.demo.ecom.service.IAdminService;
 
@@ -21,14 +22,19 @@ public class AdminServiceImpl implements IAdminService{
 	}
 
 	@Override
-	public Admin saveData(Admin t) {
-		return adminRepo.save(t);
+	public Admin saveData(Admin a) {
+		a.setCreated_date(System.currentTimeMillis());
+		a.setUpdated_date(a.getCreated_date());
+		return adminRepo.save(a);
 	}
 
 	@Override
-	public Admin updateData(Admin t) {
-		// TODO Auto-generated method stub
-		return null;
+	public Admin updateData(Admin a) {
+		System.out.print("service " +a);
+		Admin searchAdmin = getDataById(a.getId());
+		a.setCreated_date(searchAdmin.getCreated_date());
+		a.setUpdated_date(System.currentTimeMillis());
+		return adminRepo.save(a);
 	}
 
 	@Override
@@ -38,8 +44,7 @@ public class AdminServiceImpl implements IAdminService{
 
 	@Override
 	public Admin getDataById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return adminRepo.findById(id).orElseThrow(()->new NotFoundException("Admin Not Found! "+ id));
 	}
 
 	@Override
