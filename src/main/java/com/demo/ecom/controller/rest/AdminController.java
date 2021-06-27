@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,25 +29,29 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 @RequestMapping("v1/admins")
 public class AdminController extends BaseController {
-
+	
 	@Autowired
 	IAdminService adminService;
 
 	@Autowired
 	IRoleService roleService;
+	
+	@Autowired
+	PasswordEncoder passcodeEncoder;
 
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> getAllDatas() {
+	public synchronized ResponseEntity<Object> getAllDatas() {
 		logInfo("Get All Admins");
 		return successResponse(adminService.getAllDatas());
 	}
 
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public synchronized ResponseEntity<Object> saveAdmin(@RequestBody AdminRequest request) {
-		logInfo("save admin");
+		logInfo("save admin" + request.getRoleId());
 		try {
 			Role role = roleService.getDataById(request.getRoleId());
 			Admin admin = new Admin(request);
+			admin.setPassword(passcodeEncoder.encode(request.getPassword()));
 			admin.setRole(role);
 			return successResponse(adminService.saveData(admin));
 		} catch (DemoBasedException e) {
@@ -60,7 +65,6 @@ public class AdminController extends BaseController {
 		logInfo("edit admin" + adminRequest);
 		try {
 			Role role = roleService.getDataById(adminRequest.getRoleId());
-			
 			Admin admin = new Admin(adminRequest);
 			admin.setId(adminRequest.getId());
 			admin.setRole(role);

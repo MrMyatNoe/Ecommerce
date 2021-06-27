@@ -5,4 +5,6 @@ import com.demo.ecom.entity.Admin;
 public interface IAdminService extends IBaseService<Admin>{
 
 	void delete();
+	
+	Admin findByemail(String email);
 }

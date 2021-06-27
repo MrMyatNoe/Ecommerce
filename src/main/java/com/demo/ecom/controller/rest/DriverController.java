@@ -2,6 +2,8 @@ package com.demo.ecom.controller.rest;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
@@ -19,10 +21,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.demo.ecom.entity.Driver;
 import com.demo.ecom.exception.DemoBasedException;
 import com.demo.ecom.service.IDriverService;
-import com.demo.ecom.service.impl.DriverServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/v1/drivers")
@@ -34,8 +39,6 @@ public class DriverController extends BaseController {
 	@Autowired
 	ServletContext context;
 	
-	DriverServiceImpl impl = new DriverServiceImpl();
-	
 	private static final String path = "/home/tmn/public/Ecommerce/Images";
 
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -44,14 +47,18 @@ public class DriverController extends BaseController {
 			throws JsonMappingException, JsonProcessingException, DemoBasedException {
 		try {
 			Driver d = new ObjectMapper().readValue(driver, Driver.class);
+			System.out.println(d);
 			boolean pathExists = new File(path+ "/Drivers").exists();
 			if (!pathExists) {
 				new File(path+ "/Drivers").mkdir();
+			} else {
+				new File(path+ "/Drivers/" + d.getName()).mkdir();
 			}
+			
 			String originalFileName = file.getOriginalFilename();
 			String newFileName = FilenameUtils.getBaseName(originalFileName) + "."
 					+ FilenameUtils.getExtension(originalFileName);
-			File serverFile = new File(path+ "/Drivers" + File.separator + newFileName);
+			File serverFile = new File(path+ "/Drivers/" + d.getName()  + File.separator + newFileName);
 			System.out.println("Server File :"+serverFile) ;
 			try {
 				FileUtils.writeByteArrayToFile(serverFile, file.getBytes());
@@ -67,14 +74,43 @@ public class DriverController extends BaseController {
 		}
 	}
 	
+	@ApiOperation(value = "Get All Drivers",response = Iterable.class, tags = "getAllDrivers")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Success"),
+			@ApiResponse(code = 401, message = "not authorized!"),
+			@ApiResponse(code = 403, message = "forbidden!!"),
+			@ApiResponse(code = 404, message = "not found!!")
+	})
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> getAllDatas(){
+	public synchronized ResponseEntity<Object> getAllDatas(){
+		logInfo("Get All Drivers");
 		return successResponse(driverService.getAllDatas());
 	}
 	
-	@RequestMapping(method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> deleteAllDatas(){
-		return deleteSuccessResponse(impl.delete());
-	}
+//	@RequestMapping(method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+//	public ResponseEntity<Object> deleteAllDatas(){
+//		logInfo("delete all");
+//		try {
+//			driverService.deleteAll();
+//			Map<String, Object> response = new HashMap<>();
+//			response.put("message", "Delete Successful");
+//			return deleteSuccessResponse(response);
+//		} catch (DemoBasedException e) {
+//			logError(e, e.getMessage());
+//			return e.response();
+//		}
+//	}
 	
+	@RequestMapping(method = RequestMethod.DELETE ,produces = MediaType.APPLICATION_JSON_VALUE)
+	//@PreAuthorize("hasRole('ADMIN')")
+	public synchronized ResponseEntity<Object> deleteDriverById(@RequestParam(name = "id") long id){
+		logInfo("delete driver");
+		try {
+			driverService.deleteById(id);
+			return deleteSuccessResponse("Delete successful");
+		} catch (DemoBasedException e) {
+			logError(e, e.getMessage());
+			return e.response();
+		}
+	}
 }

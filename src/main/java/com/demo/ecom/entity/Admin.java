@@ -1,13 +1,16 @@
 package com.demo.ecom.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
 import com.demo.ecom.request.AdminRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class Admin {
@@ -22,7 +25,8 @@ public class Admin {
 	private String address;
 	private String gender;
 	
-	@ManyToOne
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "role_id",nullable = false)
 	private Role role;
 	@JsonIgnore
@@ -38,7 +42,6 @@ public class Admin {
 		this.name = request.getName();
 		this.phone = request.getPhone();
 		this.email = request.getEmail();
-		this.password = request.getPassword();
 		this.gender = request.getGender();
 		this.address = request.getAddress();
 	}

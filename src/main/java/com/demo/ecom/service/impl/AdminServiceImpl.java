@@ -11,11 +11,11 @@ import com.demo.ecom.repository.AdminRespostiory;
 import com.demo.ecom.service.IAdminService;
 
 @Service
-public class AdminServiceImpl implements IAdminService{
+public class AdminServiceImpl implements IAdminService {
 
 	@Autowired
 	AdminRespostiory adminRepo;
-	
+
 	@Override
 	public List<Admin> getAllDatas() {
 		return adminRepo.findAll();
@@ -30,7 +30,6 @@ public class AdminServiceImpl implements IAdminService{
 
 	@Override
 	public Admin updateData(Admin a) {
-		System.out.print("service " +a);
 		Admin searchAdmin = getDataById(a.getId());
 		a.setCreated_date(searchAdmin.getCreated_date());
 		a.setUpdated_date(System.currentTimeMillis());
@@ -44,13 +43,19 @@ public class AdminServiceImpl implements IAdminService{
 
 	@Override
 	public Admin getDataById(long id) {
-		return adminRepo.findById(id).orElseThrow(()->new NotFoundException("Admin Not Found! "+ id));
+		return adminRepo.findById(id)
+				.orElseThrow(() -> new NotFoundException("Admin Not Found! " + id));
 	}
 
 	@Override
 	public void delete() {
-		this.adminRepo.deleteAll();
+		adminRepo.deleteAll();
 	}
 
-	
+	@Override
+	public Admin findByemail(String email) {
+		System.out.println("Service "+ email);
+		return adminRepo.findByEmail(email).orElseThrow(() -> new NotFoundException("Admin Not Found! " + email));
+	}
+
 }

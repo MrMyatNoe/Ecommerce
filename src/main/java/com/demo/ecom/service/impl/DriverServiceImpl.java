@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.demo.ecom.entity.Driver;
-import com.demo.ecom.exception.FormatException;
 import com.demo.ecom.exception.NotFoundException;
 import com.demo.ecom.repository.DriverRepository;
 import com.demo.ecom.service.IDriverService;
@@ -48,18 +47,17 @@ public class DriverServiceImpl implements IDriverService {
 
 	@Override
 	public void deleteById(long id) {
-		// TODO Auto-generated method stub
-
+		this.driverRepo.deleteById(id);
 	}
 
 	@Override
 	public Driver getDataById(long id) {
 		return driverRepo.findById(id).orElseThrow(() -> new NotFoundException("Driver Id not found!"));
 	}
-	
-	public String delete() {
-		this.driverRepo.deleteAll();
-		return "delete successful";
+
+	@Override
+	public void deleteAll() {
+		driverRepo.deleteAll();		
 	}
 
 }

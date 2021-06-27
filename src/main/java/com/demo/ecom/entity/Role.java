@@ -2,12 +2,16 @@ package com.demo.ecom.entity;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
 
+import com.demo.ecom.exception.BadRequestException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 
@@ -22,7 +26,7 @@ public class Role {
 	@NotNull
 	private int level;
 	
-	@OneToMany(mappedBy = "role")
+	@OneToMany(mappedBy = "role",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	@JsonIgnore
 	private Set<Admin> admins;
 
@@ -80,6 +84,13 @@ public class Role {
 		this.admins = admins;
 	}
 
+	@PreRemove
+    public void checkReviewAssociationBeforeRemoval() {
+        if (!this.admins.isEmpty()) {
+            throw new BadRequestException("Can't remove a role that has admin.");
+        }
+    }
+	
 	@Override
 	public String toString() {
 		return "Role [id=" + id + ", name=" + name + ", level=" + level + ", admins=" + admins + ", created_date="
