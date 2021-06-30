@@ -56,6 +56,8 @@ public class AdminServiceImpl implements IAdminService {
 	public void delete() {
 		adminRepo.deleteAll();
 	}
+	
+	
 
 	@Override
 	public Admin login(String email, String password) {
@@ -64,6 +66,15 @@ public class AdminServiceImpl implements IAdminService {
 			throw new BadRequestException("Wrong Password! Try Again");
 		}
 		return admin;
+	}
+
+	@Override
+	public void resetPassword(String email, String password) {
+		Admin searchAdmin = adminRepo.findByEmail(email).orElseThrow(() -> new NotFoundException("Admin Not Found! " + email));;
+		searchAdmin.setPassword(password);
+		searchAdmin.setCreated_date(searchAdmin.getCreated_date());
+		searchAdmin.setUpdated_date(System.currentTimeMillis());
+		adminRepo.save(searchAdmin);
 	}
 
 }

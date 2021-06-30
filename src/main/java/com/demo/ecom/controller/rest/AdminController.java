@@ -32,7 +32,6 @@ import com.demo.ecom.entity.Role;
 import com.demo.ecom.entity.UserSession;
 import com.demo.ecom.exception.DemoBasedException;
 import com.demo.ecom.request.AdminRequest;
-import com.demo.ecom.request.LoginRequest;
 import com.demo.ecom.response.JwtResponse;
 import com.demo.ecom.service.IAdminService;
 import com.demo.ecom.service.IRoleService;
@@ -45,16 +44,16 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 @RequestMapping("v1/admins")
 public class AdminController extends BaseController {
-	
+
 	@Autowired
 	IAdminService adminService;
 
 	@Autowired
 	IRoleService roleService;
-	
+
 	@Autowired
 	PasswordEncoder passcodeEncoder;
-	
+
 	@Autowired
 	AuthenticationManager authManager;
 
@@ -100,7 +99,7 @@ public class AdminController extends BaseController {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE, path = "/all")
+	@RequestMapping(method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE, value = "/all")
 	public synchronized ResponseEntity<Object> deleteAll() {
 		logInfo("delete all");
 		try {
@@ -143,13 +142,11 @@ public class AdminController extends BaseController {
 			return e.response();
 		}
 	}
-	
+
 	@PostMapping("/login")
-	public synchronized ResponseEntity<Object> authenticateUser(@RequestBody LoginRequest loginRequest)
-			throws Exception {
+	public synchronized ResponseEntity<Object> authenticateUser(@RequestParam(name = "email") String email,
+			@RequestParam(name = "password") String password) throws Exception {
 		try {
-			String email = loginRequest.getEmail();
-			String password = loginRequest.getPassword();
 			String ipAddress = InetAddress.getLocalHost().getHostAddress();
 			Admin admin = adminService.login(email, password);
 
@@ -219,6 +216,19 @@ public class AdminController extends BaseController {
 			}
 			userSessionService.updateData(userSession);
 			return successResponse(logoutSuccess);
+		} catch (DemoBasedException e) {
+			logError(e, e.getMessage());
+			return e.response();
+		}
+	}
+	
+	@RequestMapping(value = "/resetpassword", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public synchronized ResponseEntity<Object> resetPassword(@RequestParam(name = "email") String email, @RequestParam(name = "password") String password) throws Exception {
+		try {
+			adminService.resetPassword(email,passcodeEncoder.encode(password));
+			Map<String, Object> response = new HashMap<>();
+			response.put("message", "Password Updated Successfully");
+			return successResponse(response);
 		} catch (DemoBasedException e) {
 			logError(e, e.getMessage());
 			return e.response();
