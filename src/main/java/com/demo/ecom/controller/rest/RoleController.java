@@ -58,7 +58,7 @@ public class RoleController extends BaseController{
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE,produces = MediaType.APPLICATION_JSON_VALUE)
-	public synchronized ResponseEntity<Object> deleteRole(@RequestParam(name = "id") long id){
+	public synchronized ResponseEntity<Object> deleteRoleById(@RequestParam(name = "id") long id){
 		logInfo("delete role");
 		try {
 			roleService.deleteById(id);

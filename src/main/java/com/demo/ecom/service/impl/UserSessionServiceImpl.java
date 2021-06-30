@@ -21,16 +21,20 @@ public class UserSessionServiceImpl implements IUserSessionService{
 	}
 
 	@Override
-	public UserSession saveData(UserSession u) {
-		u.setCreatedDate(System.currentTimeMillis());
-		u.setUpdatedDate(u.getCreatedDate());
-		return userSessionRepository.save(u);
+	public UserSession saveData(UserSession us) {
+		us.setCreatedDate(System.currentTimeMillis());
+		us.setUpdatedDate(us.getCreatedDate());
+		return userSessionRepository.save(us);
 	}
 
 	@Override
-	public UserSession updateData(UserSession t) {
-		// TODO Auto-generated method stub
-		return null;
+	public UserSession updateData(UserSession us) {
+		UserSession oldUserSession = getDataById(us.getId());
+		us.setExpireTime(System.currentTimeMillis());
+
+		us.setCreatedDate(oldUserSession.getCreatedDate());
+		us.setUpdatedDate(System.currentTimeMillis());
+		return userSessionRepository.save(us);
 	}
 
 	@Override
