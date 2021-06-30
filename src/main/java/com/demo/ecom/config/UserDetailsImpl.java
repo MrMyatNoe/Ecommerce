@@ -41,12 +41,6 @@ public class UserDetailsImpl implements UserDetails{
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		SimpleGrantedAuthority a = new SimpleGrantedAuthority(admin.getRole().getName());
 		authorities.add(a);
-		UserDetailsImpl impl = new UserDetailsImpl(admin.getId(), 
-				admin.getName(),
-				admin.getEmail(), 
-				admin.getPassword(), 
-				authorities);
-		System.out.println("UserDetailsImpl : " + impl);
 		return new UserDetailsImpl(admin.getId(), 
 						admin.getName(),
 						admin.getEmail(), 

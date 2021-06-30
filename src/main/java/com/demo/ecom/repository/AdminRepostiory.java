@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.demo.ecom.entity.Admin;
 
 @Repository
-public interface AdminRespostiory extends JpaRepository<Admin, Long> {
+public interface AdminRepostiory extends JpaRepository<Admin, Long> {
 
 	Optional<Admin> findByName(String name);
 	

@@ -3,18 +3,23 @@ package com.demo.ecom.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.demo.ecom.entity.Admin;
 import com.demo.ecom.exception.NotFoundException;
-import com.demo.ecom.repository.AdminRespostiory;
+import com.demo.ecom.exception.BadRequestException;
+import com.demo.ecom.repository.AdminRepostiory;
 import com.demo.ecom.service.IAdminService;
 
 @Service
 public class AdminServiceImpl implements IAdminService {
 
 	@Autowired
-	AdminRespostiory adminRepo;
+	AdminRepostiory adminRepo;
+	
+	@Autowired
+	PasswordEncoder encoder;
 
 	@Override
 	public List<Admin> getAllDatas() {
@@ -53,9 +58,12 @@ public class AdminServiceImpl implements IAdminService {
 	}
 
 	@Override
-	public Admin findByemail(String email) {
-		System.out.println("Service "+ email);
-		return adminRepo.findByEmail(email).orElseThrow(() -> new NotFoundException("Admin Not Found! " + email));
+	public Admin login(String email, String password) {
+		Admin admin = adminRepo.findByEmail(email).orElseThrow(() -> new NotFoundException("Admin Not Found! " + email));
+		if(!encoder.matches(password, admin.getPassword())) {
+			throw new BadRequestException("Wrong Password! Try Again");
+		}
+		return admin;
 	}
 
 }

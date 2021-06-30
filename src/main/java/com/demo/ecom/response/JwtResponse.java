@@ -10,13 +10,9 @@ public class JwtResponse {
 	private String username;
 	private String email;
 	private List<String> roles;
-
-	public JwtResponse(String accessToken, Long id, String username, String email, List<String> roles) {
-		this.token = accessToken;
-		this.id = id;
-		this.username = username;
-		this.email = email;
-		this.roles = roles;
+	
+	public JwtResponse() {
+		
 	}
 
 	public String getToken() {
@@ -66,4 +62,11 @@ public class JwtResponse {
 	public void setRoles(List<String> roles) {
 		this.roles = roles;
 	}
+
+	@Override
+	public String toString() {
+		return "JwtResponse [token=" + token + ", type=" + type + ", id=" + id + ", username=" + username + ", email="
+				+ email + ", roles=" + roles + "]";
+	}
+	
 }

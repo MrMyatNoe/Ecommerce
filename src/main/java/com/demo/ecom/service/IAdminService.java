@@ -6,5 +6,5 @@ public interface IAdminService extends IBaseService<Admin>{
 
 	void delete();
 	
-	Admin findByemail(String email);
+	Admin login(String email, String password);
 }

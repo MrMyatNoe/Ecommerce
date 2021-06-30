@@ -10,20 +10,19 @@ import org.springframework.stereotype.Service;
 
 import com.demo.ecom.entity.Admin;
 import com.demo.ecom.exception.NotFoundException;
-import com.demo.ecom.repository.AdminRespostiory;
+import com.demo.ecom.repository.AdminRepostiory;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService{
 
 	@Autowired
-	AdminRespostiory adminRepo;
+	AdminRepostiory adminRepo;
 	
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Admin admin = adminRepo.findByName(username)
 				.orElseThrow(() -> new NotFoundException("User not found with username " + username));
-		System.out.println("User details impl : " + admin);
 		return UserDetailsImpl.buildAdmin(admin);
 	}
 
