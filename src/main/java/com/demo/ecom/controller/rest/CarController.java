@@ -34,10 +34,10 @@ public class CarController extends BaseController{
 	}
 	
 	@RequestMapping(method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
-	public synchronized ResponseEntity<Object> saveCar(@RequestBody Car Car){
+	public synchronized ResponseEntity<Object> saveCar(@RequestBody Car car){
 		logInfo("save Car");
 		try {
-			return successResponse(carService.saveData(Car));
+			return successResponse(carService.saveData(car));
 		} catch (DemoBasedException e) {
 			logError(e, e.getMessage());
 			return e.response();
