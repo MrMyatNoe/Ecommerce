@@ -21,10 +21,10 @@ public class UserSessionServiceImpl implements IUserSessionService{
 	}
 
 	@Override
-	public UserSession saveData(UserSession us) {
-		us.setCreatedDate(System.currentTimeMillis());
-		us.setUpdatedDate(us.getCreatedDate());
-		return userSessionRepository.save(us);
+	public UserSession saveData(UserSession u) {
+		u.setCreated_date(System.currentTimeMillis());
+		u.setUpdated_date(u.getCreated_date());
+		return userSessionRepository.save(u);
 	}
 
 	@Override
@@ -32,8 +32,8 @@ public class UserSessionServiceImpl implements IUserSessionService{
 		UserSession oldUserSession = getDataById(us.getId());
 		us.setExpireTime(System.currentTimeMillis());
 
-		us.setCreatedDate(oldUserSession.getCreatedDate());
-		us.setUpdatedDate(System.currentTimeMillis());
+		us.setCreated_date(oldUserSession.getCreated_date());
+		us.setUpdated_date(System.currentTimeMillis());
 		return userSessionRepository.save(us);
 	}
 

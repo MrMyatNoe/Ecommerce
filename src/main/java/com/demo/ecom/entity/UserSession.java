@@ -1,11 +1,11 @@
 package com.demo.ecom.entity;
 
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class UserSession {
@@ -20,12 +20,11 @@ public class UserSession {
 	private long loginTime;
 	private long expireTime;
 	private String role;
-	private long createdDate;
-	private long updatedDate;
-	
-	public UserSession() {
-		// TODO Auto-generated constructor stub
-	}
+	@JsonIgnore
+	private long created_date;
+
+	@JsonIgnore
+	private long updated_date;
 
 	public long getId() {
 		return id;
@@ -82,7 +81,7 @@ public class UserSession {
 	public void setExpireTime(long expireTime) {
 		this.expireTime = expireTime;
 	}
-	
+
 	public String getRole() {
 		return role;
 	}
@@ -91,27 +90,27 @@ public class UserSession {
 		this.role = role;
 	}
 
-	public long getCreatedDate() {
-		return createdDate;
+	public long getCreated_date() {
+		return created_date;
 	}
 
-	public void setCreatedDate(long createdDate) {
-		this.createdDate = createdDate;
+	public void setCreated_date(long created_date) {
+		this.created_date = created_date;
 	}
 
-	public long getUpdatedDate() {
-		return updatedDate;
+	public long getUpdated_date() {
+		return updated_date;
 	}
 
-	public void setUpdatedDate(long updatedDate) {
-		this.updatedDate = updatedDate;
+	public void setUpdated_date(long updated_date) {
+		this.updated_date = updated_date;
 	}
 
 	@Override
 	public String toString() {
 		return "UserSession [id=" + id + ", username=" + username + ", email=" + email + ", token=" + token
 				+ ", ipAddress=" + ipAddress + ", loginTime=" + loginTime + ", expireTime=" + expireTime + ", role="
-				+ role + ", createdDate=" + createdDate + ", updatedDate=" + updatedDate + "]";
+				+ role + ", created_date=" + created_date + ", updated_date=" + updated_date + "]";
 	}
 
 }

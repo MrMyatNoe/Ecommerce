@@ -3,12 +3,16 @@ package com.demo.ecom.entity;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
 
 @Entity
@@ -44,6 +48,11 @@ public class Driver {
 	@JsonIgnore
 	private List<DailyTransaction> dailyList;
 
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "role_id",nullable = false)
+	private Role role;
+	
 	@JsonIgnore
 	private long created_date;
 
@@ -120,6 +129,14 @@ public class Driver {
 
 	public void setImageName(String imageName) {
 		this.imageName = imageName;
+	}
+	
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	public long getCreated_date() {

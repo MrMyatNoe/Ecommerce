@@ -2,8 +2,6 @@ package com.demo.ecom.controller.rest;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.ServletContext;
 
@@ -12,6 +10,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.demo.ecom.entity.Driver;
+import com.demo.ecom.entity.Role;
 import com.demo.ecom.exception.DemoBasedException;
 import com.demo.ecom.service.IDriverService;
+import com.demo.ecom.service.IRoleService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,6 +39,12 @@ public class DriverController extends BaseController {
 
 	@Autowired
 	ServletContext context;
+	
+	@Autowired
+	PasswordEncoder passcodeEncoder;
+	
+	@Autowired
+	IRoleService roleService;
 	
 	private static final String path = "/home/tmn/public/Ecommerce/Images";
 
@@ -65,8 +72,11 @@ public class DriverController extends BaseController {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
+			final String roleName = "Driver";
+			Role role = roleService.findByName(roleName);
+			d.setPassword(passcodeEncoder.encode(d.getPassword()));
 			d.setImageName(newFileName);
+			d.setRole(role);
 			return successResponse(driverService.saveData(d));
 		} catch (DemoBasedException e) {
 			logError(e, e.getMessage());

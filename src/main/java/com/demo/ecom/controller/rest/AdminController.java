@@ -144,7 +144,7 @@ public class AdminController extends BaseController {
 	}
 
 	@PostMapping("/login")
-	public synchronized ResponseEntity<Object> authenticateUser(@RequestParam(name = "email") String email,
+	public synchronized ResponseEntity<Object> login(@RequestParam(name = "email") String email,
 			@RequestParam(name = "password") String password) throws Exception {
 		try {
 			String ipAddress = InetAddress.getLocalHost().getHostAddress();
@@ -221,11 +221,13 @@ public class AdminController extends BaseController {
 			return e.response();
 		}
 	}
-	
+
 	@RequestMapping(value = "/resetpassword", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public synchronized ResponseEntity<Object> resetPassword(@RequestParam(name = "email") String email, @RequestParam(name = "password") String password) throws Exception {
+	public synchronized ResponseEntity<Object> resetPassword(@RequestParam(name = "email") String email,
+			@RequestParam(name = "password") String password, @RequestParam(name = "role") String role)
+			throws Exception {
 		try {
-			adminService.resetPassword(email,passcodeEncoder.encode(password));
+			adminService.resetPassword(email, passcodeEncoder.encode(password));
 			Map<String, Object> response = new HashMap<>();
 			response.put("message", "Password Updated Successfully");
 			return successResponse(response);
