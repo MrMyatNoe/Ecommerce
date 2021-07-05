@@ -35,6 +35,9 @@ public class Driver {
 
 	@NotNull
 	private String phone;
+	
+	@NotNull
+	private String password;
 	private String imageName;
 
 	@OneToMany(mappedBy = "driver")
@@ -101,6 +104,14 @@ public class Driver {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getImageName() {
