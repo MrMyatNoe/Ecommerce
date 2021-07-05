@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.demo.ecom.entity.Role;
 import com.demo.ecom.exception.AlreadyExistsException;
+import com.demo.ecom.exception.DemoBasedException;
 import com.demo.ecom.exception.NotFoundException;
 import com.demo.ecom.repository.RoleRepository;
 import com.demo.ecom.service.IRoleService;
@@ -56,6 +57,10 @@ public class RoleServiceImpl implements IRoleService {
 
 	@Override
 	public Role findByName(String name) {
-		return roleRepo.findByName(name);
+		try {
+			return roleRepo.findByName(name);
+		} catch (DemoBasedException e) {
+			throw new NotFoundException("Role Not Found!" + name);
+		}
 	}
 }
