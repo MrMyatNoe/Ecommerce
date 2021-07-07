@@ -62,8 +62,6 @@ public class AdminServiceImpl implements IAdminService {
 		adminRepo.deleteAll();
 	}
 	
-	
-
 	@Override
 	public Admin login(String email, String password) {
 		Admin admin = adminRepo.findByEmail(email).orElseThrow(() -> new NotFoundException("Admin Not Found! " + email));

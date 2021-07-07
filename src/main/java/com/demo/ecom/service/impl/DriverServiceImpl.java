@@ -3,9 +3,12 @@ package com.demo.ecom.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.demo.ecom.entity.Admin;
 import com.demo.ecom.entity.Driver;
+import com.demo.ecom.exception.BadRequestException;
 import com.demo.ecom.exception.NotFoundException;
 import com.demo.ecom.repository.DriverRepository;
 import com.demo.ecom.service.IDriverService;
@@ -18,6 +21,9 @@ public class DriverServiceImpl implements IDriverService {
 
 	@Autowired
 	DriverRepository driverRepo;
+	
+	@Autowired
+	PasswordEncoder passcodeEncoder;
 
 	@Override
 	public List<Driver> getAllDatas() {
@@ -58,6 +64,15 @@ public class DriverServiceImpl implements IDriverService {
 	@Override
 	public void deleteAll() {
 		driverRepo.deleteAll();		
+	}
+
+	@Override
+	public Driver login(String phone, String password) {
+		Driver searchDriver = driverRepo.findByPhone(phone).orElseThrow(() -> new NotFoundException("Driver Not Found! " + phone));
+		if(!passcodeEncoder.matches(password, searchDriver.getPassword())) {
+			throw new BadRequestException("Wrong Password! Try Again");
+		}
+		return searchDriver;
 	}
 
 }

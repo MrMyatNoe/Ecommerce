@@ -51,6 +51,7 @@ public class Driver {
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "role_id",nullable = false)
+	@JsonIgnore
 	private Role role;
 	
 	@JsonIgnore
@@ -165,9 +166,10 @@ public class Driver {
 
 	@Override
 	public String toString() {
-		return "Driver [id=" + id + ", name=" + name + ", nrc=" + nrc + ", gender=" + gender + ", license=" + license
-				+ ", address=" + address + ", phone=" + phone + ", imageName=" + imageName + ", created_date="
-				+ created_date + ", updated_date=" + updated_date + ", dailyList=" + dailyList + "]";
+		return "Driver [id=" + id + ", name=" + name + ", nrc=" + nrc + ", license=" + license + ", gender=" + gender
+				+ ", address=" + address + ", phone=" + phone + ", password=" + password + ", imageName=" + imageName
+				+ ", dailyList=" + dailyList + ", role=" + role + ", created_date=" + created_date + ", updated_date="
+				+ updated_date + "]";
 	}
 
 }

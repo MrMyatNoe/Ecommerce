@@ -11,7 +11,8 @@ import com.demo.ecom.entity.Driver;
 @Repository
 public interface DriverRepository extends JpaRepository<Driver, Long> {
 	
-	@Query(value = "SELECT * FROM Driver d WHERE d.email = ?1", nativeQuery = true)
-	Optional<Driver> findByEmail(String email);
-
+	@Query(value = "SELECT * FROM Driver d WHERE d.phone = ?1", nativeQuery = true)
+	Optional<Driver> findByPhone(String phone);
+	
+	Optional<Driver> findByName(String name);
 }

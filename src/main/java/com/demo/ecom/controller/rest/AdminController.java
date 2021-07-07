@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,6 +29,7 @@ import com.demo.ecom.config.JwtUtils;
 import com.demo.ecom.config.UserDetailsImpl;
 import com.demo.ecom.entity.Admin;
 import com.demo.ecom.entity.Category;
+import com.demo.ecom.entity.Driver;
 import com.demo.ecom.entity.Role;
 import com.demo.ecom.entity.UserSession;
 import com.demo.ecom.exception.DemoBasedException;
@@ -64,6 +66,7 @@ public class AdminController extends BaseController {
 	IUserSessionService userSessionService;
 
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	//@PreAuthorize("hasRole('ADMIN')")
 	public synchronized ResponseEntity<Object> getAllDatas() {
 		logInfo("Get All Admins");
 		return successResponse(adminService.getAllDatas());
@@ -132,7 +135,7 @@ public class AdminController extends BaseController {
 			@ApiResponse(code = 401, message = "not authorized!"), @ApiResponse(code = 403, message = "forbidden!!"),
 			@ApiResponse(code = 404, message = "not found!!") })
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
-	// @PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('ADMIN')")
 	public synchronized ResponseEntity<Object> getAdminById(@PathVariable("id") Long id) {
 		logInfo("Get Admin By Id");
 		try {
@@ -172,7 +175,7 @@ public class AdminController extends BaseController {
 				}
 			}
 			Authentication authentication = authManager
-					.authenticate(new UsernamePasswordAuthenticationToken(admin.getName(), password));
+					.authenticate(new UsernamePasswordAuthenticationToken(admin.getName().concat("&&" +admin.getRole().getName()), password));
 
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
