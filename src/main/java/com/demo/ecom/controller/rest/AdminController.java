@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,7 +28,6 @@ import com.demo.ecom.config.JwtUtils;
 import com.demo.ecom.config.UserDetailsImpl;
 import com.demo.ecom.entity.Admin;
 import com.demo.ecom.entity.Category;
-import com.demo.ecom.entity.Driver;
 import com.demo.ecom.entity.Role;
 import com.demo.ecom.entity.UserSession;
 import com.demo.ecom.exception.DemoBasedException;
@@ -179,7 +177,7 @@ public class AdminController extends BaseController {
 
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
-			String jwt = jwtUtils.generateToken(authentication);
+			String jwt = jwtUtils.generateTokenForAdmin(authentication);
 
 			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 			roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toList());

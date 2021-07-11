@@ -1,8 +1,12 @@
 package com.demo.ecom.service.impl;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.demo.ecom.entity.Role;
@@ -10,21 +14,31 @@ import com.demo.ecom.exception.AlreadyExistsException;
 import com.demo.ecom.exception.DemoBasedException;
 import com.demo.ecom.exception.NotFoundException;
 import com.demo.ecom.repository.RoleRepository;
+import com.demo.ecom.service.IAsyncService;
+import com.demo.ecom.service.IRoleAsyncService;
 import com.demo.ecom.service.IRoleService;
 
 @Service
+@Transactional
 public class RoleServiceImpl implements IRoleService {
 
 	@Autowired
 	RoleRepository roleRepo;
+	
+	@Autowired
+	IRoleAsyncService asyncService;
 
 	@Override
 	public List<Role> getAllDatas() {
-		return this.roleRepo.findAll();
+//		CompletableFuture<List<Role>> listSync = asyncService.getAllRoles();
+//		List<Role> list = listSync.join();
+		//return asyncService.getAllDatas().join();
+		return roleRepo.findAll();
 	}
 
 	@Override
 	public Role saveData(Role r) {
+		//return asyncService.saveData(r).join();
 		if (existByName(r.getName())) {
 			throw new AlreadyExistsException("Category already exists");
 		}

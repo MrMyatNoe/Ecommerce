@@ -9,6 +9,10 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+/**
+ * @author tmn
+ *
+ */
 @Component
 public class JwtUtils {
 
@@ -18,9 +22,18 @@ public class JwtUtils {
 	@Value("${tmn.app.jwtExpirationMs}")
 	private int jwtExpirations;
 	
-	public String generateToken(Authentication authentication) {
+	public String generateTokenForAdmin(Authentication authentication) {
 		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-		return Jwts.builder().setSubject(userPrincipal.getUsername())
+		return Jwts.builder().setSubject(userPrincipal.getEmail())
+				.setIssuedAt(new Date())
+				.setExpiration(new Date((new Date()).getTime() + jwtExpirations))
+				.signWith(SignatureAlgorithm.HS512,jwtSecret)
+				.compact();
+	}
+	
+	public String generateTokenForDriver(Authentication authentication) {
+		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+		return Jwts.builder().setSubject(userPrincipal.getPhone())
 				.setIssuedAt(new Date())
 				.setExpiration(new Date((new Date()).getTime() + jwtExpirations))
 				.signWith(SignatureAlgorithm.HS512,jwtSecret)

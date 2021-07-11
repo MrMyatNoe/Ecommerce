@@ -18,8 +18,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ApiResponse;
 
-@RestController
-@RequestMapping("/v1/categories")
+@RestController //.1
+@RequestMapping("/v1/categories") //2
 public class CategoryController extends BaseController{
 
 	@Autowired

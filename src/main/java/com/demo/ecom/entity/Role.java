@@ -31,6 +31,7 @@ public class Role {
 	private Set<Admin> admins;
 	
 	@OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
 	private Set<Driver> drivers;
 
 	@JsonIgnore

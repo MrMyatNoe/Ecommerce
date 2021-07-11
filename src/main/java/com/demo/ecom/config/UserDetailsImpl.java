@@ -12,6 +12,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.demo.ecom.entity.Admin;
 import com.demo.ecom.entity.Driver;
 
+/**
+ * @author tmn
+ *
+ */
 public class UserDetailsImpl implements UserDetails {
 
 	/**
@@ -41,10 +45,7 @@ public class UserDetailsImpl implements UserDetails {
 		this.authorities = authorities;
 	}
 	
-	
-
 	public static UserDetailsImpl buildAdmin(Admin admin) {
-		System.out.println("in impl "+ admin);
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		SimpleGrantedAuthority a = new SimpleGrantedAuthority(admin.getRole().getName());
 		authorities.add(a);
@@ -52,7 +53,6 @@ public class UserDetailsImpl implements UserDetails {
 	}
 
 	public static UserDetailsImpl buildDriver(Driver driver) {
-		System.out.println("in impl "+ driver);
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		SimpleGrantedAuthority a = new SimpleGrantedAuthority(driver.getRole().getName());
 		authorities.add(a);
@@ -71,6 +71,10 @@ public class UserDetailsImpl implements UserDetails {
 
 	public String getEmail() {
 		return email;
+	}
+	
+	public String getPhone() {
+		return phone;
 	}
 
 	@Override

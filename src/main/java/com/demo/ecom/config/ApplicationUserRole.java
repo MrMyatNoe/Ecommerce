@@ -15,8 +15,8 @@ import static com.demo.ecom.config.ApplicationUserPermission.*;
  */
 public enum ApplicationUserRole {
 
-	ADMIN(Sets.newHashSet(DRIVER_READ, DRIVER_WRITE, ADMIN_READ, ADMIN_WRITE)), 
-	DRIVER(Sets.newHashSet());
+	ADMIN(Sets.newHashSet(DRIVER_READ, DRIVER_WRITE, ADMIN_READ, ADMIN_WRITE)),
+	DRIVER(Sets.newHashSet(DRIVER_READ, DRIVER_WRITE));
 
 	private final Set<ApplicationUserPermission> permissions;
 

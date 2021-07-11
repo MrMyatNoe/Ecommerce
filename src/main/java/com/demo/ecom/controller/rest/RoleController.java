@@ -1,6 +1,7 @@
 package com.demo.ecom.controller.rest;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,16 +31,24 @@ public class RoleController extends BaseController{
 	IRoleService roleService;
 	
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> getAllDatas(){
+	public synchronized ResponseEntity<Object> getAllDatas(){
 		logInfo("Get All Roles");
-		return successResponse(roleService.getAllDatas());
+		long start = System.currentTimeMillis();
+		List<Role> list = roleService.getAllDatas();
+		long end = System.currentTimeMillis();
+		System.out.println("Total time : "+ (end - start));
+		return successResponse(list);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
 	public synchronized ResponseEntity<Object> saveAdmin(@RequestBody Role role){
 		logInfo("save role");
 		try {
-			return successResponse(roleService.saveData(role));
+			long start = System.currentTimeMillis();
+			long end = System.currentTimeMillis();
+			Role saveRole = roleService.saveData(role);
+			System.out.println("Total time : "+ (end - start));
+			return successResponse(saveRole);
 		} catch (DemoBasedException e) {
 			logError(e, e.getMessage());
 			return e.response();

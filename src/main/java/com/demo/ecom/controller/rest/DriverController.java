@@ -196,7 +196,7 @@ public class DriverController extends BaseController {
 					.authenticate(new UsernamePasswordAuthenticationToken(driver.getName().concat("&&"+driver.getRole().getName()), password));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			
-			String jwt = jwtUtils.generateToken(authentication);
+			String jwt = jwtUtils.generateTokenForDriver(authentication);
 			System.out.println("jwt : " + jwt);
 			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 			roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toList());
