@@ -88,13 +88,12 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter{
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
 			.authorizeRequests()
-			.antMatchers("/api/v1/drivers/**").permitAll()
-			.antMatchers("/api/v1/admins/**").permitAll();
-			//.antMatchers(HttpMethod.POST, "/drivers/login").permitAll()
-//			//.antMatchers("/error").permitAll()
-			//.anyRequest().authenticated();
+			.antMatchers(HttpMethod.POST,"/v1/admins/login").permitAll()
+			.antMatchers(HttpMethod.POST, "/v1/admins").permitAll()
+			.antMatchers("/error").permitAll()
+			.anyRequest().authenticated();
+			//.antMatchers(HttpMethod.POST, "/admins").permitAll();
 			//.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-			
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 

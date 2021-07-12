@@ -12,4 +12,7 @@ public interface UserSessionRepository extends JpaRepository<UserSession, Long>{
 	
 	@Query(value = "SELECT * FROM UserSession u WHERE u.phone = ?1", nativeQuery = true)
 	UserSession getUserSessionByPhone(String phone);
+	
+	@Query(value = "SELECT * FROM UserSession u WHERE u.token = ?1", nativeQuery = true)
+	UserSession getUserSessionByToken(String token);
 }

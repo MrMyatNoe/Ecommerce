@@ -43,6 +43,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			return UserDetailsImpl.buildDriver(driver);
 
 		} else if (userType.equals("Admin")) {
+			System.out.println("user name : " + username + " user type : " + userType);
 			Admin admin = adminRepo.findByName(username)
 					.orElseThrow(() -> new UsernameNotFoundException("User not found with username "));
 			return UserDetailsImpl.buildAdmin(admin);

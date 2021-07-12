@@ -59,12 +59,19 @@ public class UserSessionServiceImpl implements IUserSessionService{
 
 	@Override
 	public UserSession getUserSessionByPhoneandIPAddress(String phone, String ipAddress) {
-		System.out.println("phone "+ phone + " : IP " + ipAddress);
 		UserSession userSession = userSessionRepository.getUserSessionByPhone(phone);
 		if(userSession == null || !ipAddress.equals(userSession.getIpAddress())) {
 			return null;
 		}
-		System.out.println(userSession);
+		return userSession;
+	}
+
+	@Override
+	public UserSession getUserSessionByToken(String token) {
+		UserSession userSession = userSessionRepository.getUserSessionByToken(token);
+		if(userSession == null) {
+			return null;
+		}
 		return userSession;
 	}
 
