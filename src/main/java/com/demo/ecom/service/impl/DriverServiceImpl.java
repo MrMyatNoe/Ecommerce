@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.demo.ecom.entity.Admin;
 import com.demo.ecom.entity.Driver;
 import com.demo.ecom.exception.BadRequestException;
 import com.demo.ecom.exception.NotFoundException;
@@ -73,6 +72,15 @@ public class DriverServiceImpl implements IDriverService {
 			throw new BadRequestException("Wrong Password! Try Again");
 		}
 		return searchDriver;
+	}
+
+	@Override
+	public void resetPassword(String phone, String password) {
+		Driver searchDriver = driverRepo.findByPhone(phone).orElseThrow(() -> new NotFoundException("Driver Not Found! " + phone));
+		searchDriver.setPassword(password);
+		searchDriver.setCreated_date(searchDriver.getCreated_date());
+		searchDriver.setUpdated_date(System.currentTimeMillis());
+		driverRepo.save(searchDriver);		
 	}
 
 }

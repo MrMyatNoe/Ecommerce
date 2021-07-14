@@ -65,7 +65,7 @@ public class AdminController extends BaseController {
 	IUserSessionService userSessionService;
 
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasRole('Admin')")
+	//@PreAuthorize("hasRole('Admin')")
 	public synchronized ResponseEntity<Object> getAllDatas() {
 		logInfo("Get All Admins");
 		return successResponse(adminService.getAllDatas());
@@ -151,11 +151,13 @@ public class AdminController extends BaseController {
 		try {
 			String ipAddress = InetAddress.getLocalHost().getHostAddress();
 			Admin admin = adminService.login(email, password);
-
+			System.out.println("Admin " + admin);
+			
 			JwtResponse jwtResponse = new JwtResponse();
 			List<String> roles = new ArrayList<>();
 
 			UserSession searchedUserSession = userSessionService.getUserSessionByEmailandIPAddress(email, ipAddress);
+			System.out.println("User session " + searchedUserSession);
 			if (searchedUserSession != null) {
 				Date currentTime = new Date();
 
@@ -173,13 +175,14 @@ public class AdminController extends BaseController {
 					userSessionService.deleteById(searchedUserSession.getId());
 				}
 			}
+			
+			System.out.println(admin.getName().concat("&&" +admin.getRole().getName()) + " : " + password);
 			Authentication authentication = authManager
 					.authenticate(new UsernamePasswordAuthenticationToken(admin.getName().concat("&&" +admin.getRole().getName()), password));
 
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
 			String jwt = jwtUtils.generateTokenForAdmin(authentication);
-
 			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 			roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toList());
 
@@ -226,7 +229,7 @@ public class AdminController extends BaseController {
 
 	@RequestMapping(value = "/resetpassword", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public synchronized ResponseEntity<Object> resetPassword(@RequestParam(name = "email") String email,
-			@RequestParam(name = "password") String password, @RequestParam(name = "role") String role)
+			@RequestParam(name = "password") String password)
 			throws Exception {
 		try {
 			adminService.resetPassword(email, passcodeEncoder.encode(password));

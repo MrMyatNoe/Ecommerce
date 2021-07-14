@@ -89,7 +89,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter{
 			.and()
 			.authorizeRequests()
 			.antMatchers(HttpMethod.POST,"/v1/admins/login").permitAll()
-			.antMatchers(HttpMethod.POST, "/v1/admins").permitAll()
+			.antMatchers(HttpMethod.POST,"/v1/drivers/resetpassword").permitAll()
+			.antMatchers(HttpMethod.POST,"/v1/drivers/login").permitAll()
+			.antMatchers("/v1/admins").permitAll()
+			.antMatchers("/v1/drivers").permitAll()
 			.antMatchers("/error").permitAll()
 			.anyRequest().authenticated();
 			//.antMatchers(HttpMethod.POST, "/admins").permitAll();

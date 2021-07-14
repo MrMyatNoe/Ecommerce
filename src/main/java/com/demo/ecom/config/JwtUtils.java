@@ -20,7 +20,7 @@ public class JwtUtils {
 	private String jwtSecret;
 	
 	//@Value("${tmn.app.jwtExpirationMs}")
-	private int jwtExpirationMs =  300000;
+	private int jwtExpirationMs =  86400000; //24hr
 	
 	public String generateTokenForAdmin(Authentication authentication) {
 		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();

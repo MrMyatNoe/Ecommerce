@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
@@ -20,6 +22,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,6 +49,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/v1/drivers")
 public class DriverController extends BaseController {
@@ -218,6 +222,22 @@ public class DriverController extends BaseController {
 			userSessionService.saveData(newUserSession);
 
 			return successResponse(jwtResponse);
+		} catch (DemoBasedException e) {
+			logError(e, e.getMessage());
+			return e.response();
+		}
+	}
+	
+	@RequestMapping(value = "/resetpassword", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public synchronized ResponseEntity<Object> resetPassword(@RequestParam(name = "phone") String phone,
+			@RequestParam(name = "password") String password)
+			throws Exception {
+		try {
+			System.out.println(phone + " : " + password );
+			driverService.resetPassword(phone, passcodeEncoder.encode(password));
+			Map<String, Object> response = new HashMap<>();
+			response.put("message", "Password Updated Successfully");
+			return successResponse(response);
 		} catch (DemoBasedException e) {
 			logError(e, e.getMessage());
 			return e.response();

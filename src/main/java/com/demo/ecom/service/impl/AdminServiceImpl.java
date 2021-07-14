@@ -7,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.demo.ecom.entity.Admin;
-import com.demo.ecom.entity.Driver;
 import com.demo.ecom.exception.NotFoundException;
 import com.demo.ecom.exception.BadRequestException;
 import com.demo.ecom.repository.AdminRepostiory;

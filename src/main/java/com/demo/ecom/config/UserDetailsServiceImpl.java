@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.demo.ecom.entity.Admin;
 import com.demo.ecom.entity.Driver;
+import com.demo.ecom.entity.Role;
 import com.demo.ecom.repository.AdminRepostiory;
 import com.demo.ecom.repository.DriverRepository;
+import com.demo.ecom.repository.RoleRepository;
 
 /**
  * @author tmn
@@ -28,6 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	DriverRepository driverRepo;
 
 	public UserDetails loadUserByUsername(String userNameType) throws UsernameNotFoundException {
+		System.out.println("User Details " + userNameType);
 		String username = null;
 		String userType = null;
 		Pattern pattern = Pattern.compile("&&");
@@ -36,19 +39,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			username = userNameType.substring(0, matcher.start());
 			userType = userNameType.substring(matcher.end());
 		}
-		
+
 		if (userType.equals("Driver")) {
 			Driver driver = driverRepo.findByName(username)
 					.orElseThrow(() -> new UsernameNotFoundException("User not found with username "));
 			return UserDetailsImpl.buildDriver(driver);
 
-		} else if (userType.equals("Admin")) {
+		} else {
 			System.out.println("user name : " + username + " user type : " + userType);
 			Admin admin = adminRepo.findByName(username)
 					.orElseThrow(() -> new UsernameNotFoundException("User not found with username "));
 			return UserDetailsImpl.buildAdmin(admin);
 		}
-		return null;
 	}
 
 }
