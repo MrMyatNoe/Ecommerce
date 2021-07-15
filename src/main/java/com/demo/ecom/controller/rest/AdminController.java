@@ -65,7 +65,7 @@ public class AdminController extends BaseController {
 	IUserSessionService userSessionService;
 
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	//@PreAuthorize("hasRole('Admin')")
+	@PreAuthorize("hasRole('Admin')")
 	public synchronized ResponseEntity<Object> getAllDatas() {
 		logInfo("Get All Admins");
 		return successResponse(adminService.getAllDatas());
