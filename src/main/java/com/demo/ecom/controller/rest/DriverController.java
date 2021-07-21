@@ -218,7 +218,7 @@ public class DriverController extends BaseController {
 			newUserSession.setIpAddress(ipAddress);
 			newUserSession.setRole(roles.get(0));
 			newUserSession.setLoginTime(System.currentTimeMillis());
-			newUserSession.setExpireTime(System.currentTimeMillis() + 300000);
+			newUserSession.setExpireTime(System.currentTimeMillis() + 3600000);
 			userSessionService.saveData(newUserSession);
 
 			return successResponse(jwtResponse);

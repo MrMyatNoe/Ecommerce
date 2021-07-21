@@ -8,12 +8,12 @@ public class DailyTransactionRequest implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Long id;
+	private long id;
 	private String status; // DAILY, REPAIR, ABSENT
 	private double amount;
 	private double fee;
-	private Long carId;
-	private Long driverId;
+	private long carId;
+	private long driverId;
 	
 	public DailyTransactionRequest() {
 	}

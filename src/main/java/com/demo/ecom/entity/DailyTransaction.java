@@ -1,6 +1,7 @@
 package com.demo.ecom.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,12 +23,14 @@ public class DailyTransaction {
 	private double fee = 0.0;
 	private double totalAmount = 0.0;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "car_id", nullable = false)
+	@JsonIgnore
 	private Car car;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "driver_id", nullable = false)
+	@JsonIgnore
 	private Driver driver;
 	
 	@JsonIgnore
@@ -39,6 +42,7 @@ public class DailyTransaction {
 	public DailyTransaction() {}
 	
 	public DailyTransaction(DailyTransactionRequest request) {
+		this.id = request.getId();
 		this.status = request.getStatus();
 		this.amount = request.getAmount();
 		this.fee = request.getFee();

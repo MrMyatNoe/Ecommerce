@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -199,7 +198,7 @@ public class AdminController extends BaseController {
 			newUserSession.setIpAddress(ipAddress);
 			newUserSession.setRole(roles.get(0));
 			newUserSession.setLoginTime(System.currentTimeMillis());
-			newUserSession.setExpireTime(System.currentTimeMillis() + 300000);
+			newUserSession.setExpireTime(System.currentTimeMillis() + 3600000);
 			userSessionService.saveData(newUserSession);
 
 			return successResponse(jwtResponse);

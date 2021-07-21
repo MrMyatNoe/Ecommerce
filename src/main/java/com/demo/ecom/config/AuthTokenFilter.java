@@ -51,7 +51,6 @@ public class AuthTokenFilter extends OncePerRequestFilter{
 			if(jwt !=null && !isTokenExpired(request)){
 				String name = jwtUtils.getUserNameFromJwtToken(jwt);
 				String type = jwtUtils.getUsertypeFromJwtToken(jwt);
-				System.out.println("user name : " + name + " user type : " + type);
 				String username = name + "&&" + type;
 				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
@@ -105,7 +104,6 @@ public class AuthTokenFilter extends OncePerRequestFilter{
 		String headerAuth = request.getHeader("Authorization");
 		if(StringUtils.hasText(headerAuth)) {
 			String token = headerAuth.substring(0,headerAuth.length());
-			System.out.println("token : "+ token);
 			return token;
 		}
 		return null;

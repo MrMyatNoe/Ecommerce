@@ -3,6 +3,7 @@ package com.demo.ecom.entity;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,7 +28,6 @@ public class Car {
 	@NotNull
 	private String modelYear;
 
-	@NotNull
 	private Long startedDate;
 
 	private String photo;
@@ -36,11 +36,15 @@ public class Car {
 	private String color;
 
 	private String taxiNo;
+	
+	private int dailyAmount;
 
 	@NotNull
 	private String licenseDate;
 
-	@OneToMany(mappedBy = "car")
+	@OneToMany(mappedBy = "car",
+			fetch = FetchType.LAZY,
+			orphanRemoval = false)
 	@JsonIgnore
 	private List<DailyTransaction> dailyList;
 	
@@ -105,6 +109,14 @@ public class Car {
 	public void setTaxiNo(String taxiNo) {
 		this.taxiNo = taxiNo;
 	}
+	
+	public int getDailyAmount() {
+		return dailyAmount;
+	}
+
+	public void setDailyAmount(int dailyAmount) {
+		this.dailyAmount = dailyAmount;
+	}
 
 	public String getLicenseDate() {
 		return licenseDate;
@@ -145,12 +157,13 @@ public class Car {
 	public void setDailyList(List<DailyTransaction> dailyList) {
 		this.dailyList = dailyList;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Car [id=" + id + ", carNo=" + carNo + ", name=" + name + ", modelYear=" + modelYear + ", startedDate="
-				+ startedDate + ", photo=" + photo + ", color=" + color + ", taxiNo=" + taxiNo + ", licenseDate="
-				+ licenseDate + ", dailyList=" + dailyList + ", created_date=" + created_date + ", updated_date="
+				+ startedDate + ", photo=" + photo + ", color=" + color + ", taxiNo=" + taxiNo 
+				+ ", dailyAmount=" + dailyAmount +", licenseDate="
+				+ licenseDate + ", created_date=" + created_date + ", updated_date="
 				+ updated_date + "]";
 	}
 
