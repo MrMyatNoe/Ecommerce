@@ -87,7 +87,7 @@ public class DailyTransactionImpl implements IDailyTransactionService {
 
 	@Override
 	public void deleteById(long id) {
-		this.dailyTransRepo.deleteById(id);
+		dailyTransRepo.deleteById(id);
 	}
 	
 }

@@ -20,7 +20,7 @@ import com.demo.ecom.service.IDailyTransactionService;
 import com.demo.ecom.service.IDriverService;
 
 @RestController
-@RequestMapping("/v1/dailytrans")
+@RequestMapping("/v1/dailyTransactions")
 public class DailyTransactionController extends BaseController{
 	
 	@Autowired

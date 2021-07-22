@@ -74,7 +74,7 @@ public class AdminController extends BaseController {
 	public synchronized ResponseEntity<Object> saveAdmin(@RequestBody AdminRequest request) {
 		logInfo("save admin");
 		try {
-			Role role = roleService.getDataById(request.getRoleId());
+			Role role = roleService.getDataById(request.getRoleId()).join();
 			Admin admin = new Admin(request);
 			admin.setPassword(passcodeEncoder.encode(request.getPassword()));
 			admin.setRole(role);
@@ -89,7 +89,7 @@ public class AdminController extends BaseController {
 	public synchronized ResponseEntity<Object> editAdmin(@RequestBody AdminRequest adminRequest) {
 		logInfo("edit admin" + adminRequest);
 		try {
-			Role role = roleService.getDataById(adminRequest.getRoleId());
+			Role role = roleService.getDataById(adminRequest.getRoleId()).join();
 			Admin admin = new Admin(adminRequest);
 			admin.setId(adminRequest.getId());
 			admin.setRole(role);

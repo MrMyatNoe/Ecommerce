@@ -25,12 +25,10 @@ public class DailyTransaction {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "car_id", nullable = false)
-	@JsonIgnore
 	private Car car;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "driver_id", nullable = false)
-	@JsonIgnore
 	private Driver driver;
 	
 	@JsonIgnore

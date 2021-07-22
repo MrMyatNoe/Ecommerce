@@ -1,7 +1,6 @@
 package com.demo.ecom.controller.rest;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,24 +30,23 @@ public class RoleController extends BaseController{
 	IRoleService roleService;
 	
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public synchronized ResponseEntity<Object> getAllDatas(){
+	public ResponseEntity<Object> getAllDatas(){
 		logInfo("Get All Roles");
-		long start = System.currentTimeMillis();
-		List<Role> list = roleService.getAllDatas();
-		long end = System.currentTimeMillis();
-		System.out.println("Total time : "+ (end - start));
-		return successResponse(list);
+		//long start = System.currentTimeMillis();
+		//List<Role> list = roleService.getAllDatas();
+		//long end = System.currentTimeMillis();
+		//System.out.println("Total time : "+ (end - start));
+		return successResponse(roleService.getAllDatas().join());
 	}
 	
 	@RequestMapping(method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
-	public synchronized ResponseEntity<Object> saveAdmin(@RequestBody Role role){
+	public ResponseEntity<Object> saveAdmin(@RequestBody Role role){
 		logInfo("save role");
 		try {
-			long start = System.currentTimeMillis();
-			long end = System.currentTimeMillis();
-			Role saveRole = roleService.saveData(role);
-			System.out.println("Total time : "+ (end - start));
-			return successResponse(saveRole);
+//			long start = System.currentTimeMillis();
+//			long end = System.currentTimeMillis();
+//			System.out.println("Total time : "+ (end - start));
+			return successResponse(roleService.saveData(role));
 		} catch (DemoBasedException e) {
 			logError(e, e.getMessage());
 			return e.response();
@@ -56,7 +54,7 @@ public class RoleController extends BaseController{
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	public synchronized ResponseEntity<Object> editRole(@RequestBody Role role){
+	public ResponseEntity<Object> editRole(@RequestBody Role role){
 		logInfo("edit role");
 		try {
 			return successResponse(roleService.updateData(role));
@@ -67,7 +65,7 @@ public class RoleController extends BaseController{
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE,produces = MediaType.APPLICATION_JSON_VALUE)
-	public synchronized ResponseEntity<Object> deleteRoleById(@RequestParam(name = "id") long id){
+	public ResponseEntity<Object> deleteRoleById(@RequestParam(name = "id") long id){
 		logInfo("delete role");
 		try {
 			roleService.deleteById(id);
