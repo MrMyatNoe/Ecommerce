@@ -145,7 +145,7 @@ public class AdminController extends BaseController {
 		}
 	}
 
-	@PostMapping("/login")
+	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, value = "/login")
 	public synchronized ResponseEntity<Object> login(@RequestParam(name = "email") String email,
 			@RequestParam(name = "password") String password) throws Exception {
 		try {
@@ -155,6 +155,7 @@ public class AdminController extends BaseController {
 			
 			JwtResponse jwtResponse = new JwtResponse();
 			List<String> roles = new ArrayList<>();
+			System.out.println("IP : "+ipAddress);
 
 			UserSession searchedUserSession = userSessionService.getUserSessionByEmailandIPAddress(email, ipAddress);
 			System.out.println("User session " + searchedUserSession);
