@@ -2,9 +2,11 @@ package com.demo.ecom.controller.rest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.demo.ecom.response.DefaultResponse;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 public abstract class BaseController {
 
 	protected ResponseEntity<Object> notFoundResponse(Object obj){

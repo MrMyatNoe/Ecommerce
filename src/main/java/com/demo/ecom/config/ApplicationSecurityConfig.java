@@ -50,36 +50,6 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		
-//		 http
-//		 .csrf().and()
-//		 .cors().disable()
-//		 //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//        // .and()
-//         //.authorizeRequests()
-////         .antMatchers(HttpMethod.GET,"/api/v1/categories/**")
-//// 			.hasAuthority(ADMIN_READ.name())
-////         .antMatchers(HttpMethod.POST,"/api/v1/categories/**").hasRole(ADMIN.name())
-////         .antMatchers(HttpMethod.PUT,"/api/v1/categories/**").hasRole(ADMIN.name())
-////         .antMatchers(HttpMethod.DELETE,"/api/v1/categories/**").hasRole(ADMIN.name())
-////         
-////		 .anonymous()
-////        //.anyRequest()
-////         //.permitAll()
-////         //.authenticated()
-////         .and()
-////         .httpBasic();
-//	        .authorizeRequests()  
-//	            .anyRequest().authenticated()  
-//	            .and()  
-//	        .formLogin().and()  
-//	        .httpBasic(); 
-		 
-		
-		//http.csrf().disable();
-		//http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/v1/drivers/**").permitAll();
-
-		
 		http.cors()
 			.and()
 			.csrf()
@@ -93,9 +63,11 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter{
 			.antMatchers(HttpMethod.POST,"/v1/drivers/login").permitAll()
 			.antMatchers("/v1/admins").permitAll()
 			.antMatchers("/v1/drivers").permitAll()
+			.antMatchers("/v1/roles").permitAll()
+			.antMatchers("/v1/cars").permitAll()
+			.antMatchers("/v1/dailyTransactions").permitAll()
 			.antMatchers("/error").permitAll()
 			.anyRequest().authenticated();
-			//.antMatchers(HttpMethod.POST, "/admins").permitAll();
 			//.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

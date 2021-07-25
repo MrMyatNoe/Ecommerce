@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -75,7 +74,7 @@ public class AdminController extends BaseController {
 	public synchronized ResponseEntity<Object> saveAdmin(@RequestBody AdminRequest request) {
 		logInfo("save admin");
 		try {
-			Role role = roleService.getDataById(request.getRoleId());
+			Role role = roleService.getDataById(request.getRoleId()).join();
 			Admin admin = new Admin(request);
 			admin.setPassword(passcodeEncoder.encode(request.getPassword()));
 			admin.setRole(role);
@@ -90,7 +89,7 @@ public class AdminController extends BaseController {
 	public synchronized ResponseEntity<Object> editAdmin(@RequestBody AdminRequest adminRequest) {
 		logInfo("edit admin" + adminRequest);
 		try {
-			Role role = roleService.getDataById(adminRequest.getRoleId());
+			Role role = roleService.getDataById(adminRequest.getRoleId()).join();
 			Admin admin = new Admin(adminRequest);
 			admin.setId(adminRequest.getId());
 			admin.setRole(role);
@@ -200,7 +199,7 @@ public class AdminController extends BaseController {
 			newUserSession.setIpAddress(ipAddress);
 			newUserSession.setRole(roles.get(0));
 			newUserSession.setLoginTime(System.currentTimeMillis());
-			newUserSession.setExpireTime(System.currentTimeMillis() + 300000);
+			newUserSession.setExpireTime(System.currentTimeMillis() + 3600000);
 			userSessionService.saveData(newUserSession);
 
 			return successResponse(jwtResponse);

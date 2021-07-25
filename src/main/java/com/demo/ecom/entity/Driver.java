@@ -2,6 +2,7 @@ package com.demo.ecom.entity;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -44,14 +45,16 @@ public class Driver {
 	private String password;
 	private String imageName;
 
-	@OneToMany(mappedBy = "driver")
+	@OneToMany(mappedBy = "driver",
+			fetch = FetchType.LAZY, 
+			cascade = CascadeType.ALL,
+			orphanRemoval = false)
 	@JsonIgnore
 	private List<DailyTransaction> dailyList;
 
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "role_id",nullable = false)
-	@JsonIgnore
 	private Role role;
 	
 	@JsonIgnore
@@ -163,12 +166,12 @@ public class Driver {
 	public void setDailyList(List<DailyTransaction> dailyList) {
 		this.dailyList = dailyList;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Driver [id=" + id + ", name=" + name + ", nrc=" + nrc + ", license=" + license + ", gender=" + gender
 				+ ", address=" + address + ", phone=" + phone + ", password=" + password + ", imageName=" + imageName
-				+ ", dailyList=" + dailyList + ", role=" + role + ", created_date=" + created_date + ", updated_date="
+				+ ", role=" + role + ", created_date=" + created_date + ", updated_date="
 				+ updated_date + "]";
 	}
 

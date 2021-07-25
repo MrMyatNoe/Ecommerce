@@ -22,7 +22,7 @@ public class CarController extends BaseController{
 	ICarService carService;
 	
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public synchronized ResponseEntity<Object> getAllDatas(){
+	public ResponseEntity<Object> getAllDatas(){
 		logInfo("Get All Cars");
 		return successResponse(carService.getAllDatas());
 	}

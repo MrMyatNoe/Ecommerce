@@ -6,7 +6,6 @@ import java.util.concurrent.CompletableFuture;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.demo.ecom.entity.Role;
@@ -14,8 +13,6 @@ import com.demo.ecom.exception.AlreadyExistsException;
 import com.demo.ecom.exception.DemoBasedException;
 import com.demo.ecom.exception.NotFoundException;
 import com.demo.ecom.repository.RoleRepository;
-import com.demo.ecom.service.IAsyncService;
-import com.demo.ecom.service.IRoleAsyncService;
 import com.demo.ecom.service.IRoleService;
 
 @Service
@@ -25,34 +22,29 @@ public class RoleServiceImpl implements IRoleService {
 	@Autowired
 	RoleRepository roleRepo;
 	
-	@Autowired
-	IRoleAsyncService asyncService;
-
 	@Override
-	public List<Role> getAllDatas() {
-//		CompletableFuture<List<Role>> listSync = asyncService.getAllRoles();
-//		List<Role> list = listSync.join();
-		//return asyncService.getAllDatas().join();
-		return roleRepo.findAll();
+	public CompletableFuture<List<Role>> getAllDatas() {
+		return CompletableFuture.completedFuture(roleRepo.findAll());
 	}
 
 	@Override
-	public Role saveData(Role r) {
-		//return asyncService.saveData(r).join();
+	public CompletableFuture<Role> saveData(Role r) {
 		if (existByName(r.getName())) {
 			throw new AlreadyExistsException("Category already exists");
 		}
 		r.setCreated_date(System.currentTimeMillis());
 		r.setUpdated_date(r.getCreated_date());
-		return this.roleRepo.save(r);
+		roleRepo.save(r);
+		return CompletableFuture.completedFuture(r);
 	}
 
 	@Override
-	public Role updateData(Role r) {
-		Role searchRole = getDataById(r.getId());
+	public CompletableFuture<Role> updateData(Role r) {
+		Role searchRole = getDataById(r.getId()).join();
 		r.setCreated_date(searchRole.getCreated_date());
 		r.setUpdated_date(System.currentTimeMillis());
-		return this.roleRepo.save(r);
+		roleRepo.save(r);
+		return CompletableFuture.completedFuture(r);
 	}
 
 	@Override
@@ -61,8 +53,9 @@ public class RoleServiceImpl implements IRoleService {
 	}
 
 	@Override
-	public Role getDataById(long id) {
-		return roleRepo.findById(id).orElseThrow(() -> new NotFoundException("Role Not Found!" + id));
+	public CompletableFuture<Role> getDataById(long id) {
+		Role searchRole = roleRepo.findById(id).orElseThrow(() -> new NotFoundException("Role Not Found!" + id));
+		return CompletableFuture.completedFuture(searchRole);
 	}
 
 	public boolean existByName(String name) {
