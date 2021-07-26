@@ -26,18 +26,18 @@ class EcommerceApplicationTests {
 //	@Autowired
 //	MockMvc mockMvc;
 
-	@Autowired
-	ICategoryService catService;
-
-	@MockBean
-	CategoryRepository catRepo;
-
-	private Category c;
-
-	@BeforeEach
-	public void setUp() {
-		c = new Category();
-	}
+//	@Autowired
+//	ICategoryService catService;
+//
+//	@MockBean
+//	CategoryRepository catRepo;
+//
+//	private Category c;
+//
+//	@BeforeEach
+//	public void setUp() {
+//		c = new Category();
+//	}
 
 	@Test
 	void contextLoads() throws Exception {
@@ -56,29 +56,29 @@ class EcommerceApplicationTests {
 //		verify(catRepo).findAll();
 	}
 
-	@Test
-	public void testListCategories() {
-		when(catRepo.findAll()).thenReturn(Stream.of(new Category()).collect(Collectors.toList()));
-		assertEquals(1, catService.getAllDatas().size());
-	}
+//	@Test
+//	public void testListCategories() {
+//		when(catRepo.findAll()).thenReturn(Stream.of(new Category()).collect(Collectors.toList()));
+//		assertEquals(1, catService.getAllDatas().size());
+//	}
 
-	@Test
-	public void testFindCategoryByNameExists() {
-		String name = "Thet";
-		c = new Category();
-		c = catService.findByName(name);
-		System.out.println(c);
-		when(catRepo.findByName(name)).thenReturn(new Category());
-		assertEquals(name, c.getName());
-	}
+//	@Test
+//	public void testFindCategoryByNameExists() {
+//		String name = "Thet";
+//		c = new Category();
+//		c = catService.findByName(name);
+//		System.out.println(c);
+//		when(catRepo.findByName(name)).thenReturn(new Category());
+//		assertEquals(name, c.getName());
+//	}
 
-	@Test
-	public void testSaveNewCategory() {
-		Category c = new Category();
-		c.setName("test");
-		c.setCreated_date(System.currentTimeMillis());
-		c.setUpdated_date(System.currentTimeMillis());
-		when(catRepo.save(c)).thenReturn(c);
-		assertEquals(c, catService.saveData(c));
-	}
+//	@Test
+//	public void testSaveNewCategory() {
+//		Category c = new Category();
+//		c.setName("test");
+//		c.setCreated_date(System.currentTimeMillis());
+//		c.setUpdated_date(System.currentTimeMillis());
+//		when(catRepo.save(c)).thenReturn(c);
+//		assertEquals(c, catService.saveData(c));
+//	}
 }

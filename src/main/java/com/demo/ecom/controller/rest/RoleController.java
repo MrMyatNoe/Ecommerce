@@ -38,7 +38,7 @@ public class RoleController extends BaseController{
 		//System.out.println("Total time : "+ (end - start));
 		return successResponse(roleService.getAllDatas().join());
 	}
-	
+		
 	@RequestMapping(method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> saveAdmin(@RequestBody Role role){
 		logInfo("save role");
