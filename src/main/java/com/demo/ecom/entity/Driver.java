@@ -12,12 +12,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.demo.ecom.request.DriverRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
 
 @Entity
-public class Driver {
+public class Driver{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,6 +64,22 @@ public class Driver {
 	@JsonIgnore
 	private long updated_date;
 
+	/**
+	 * 
+	 */
+	public Driver() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public Driver(DriverRequest request) {
+		this.name = request.getName();
+		this.nrc = request.getNrc();
+		this.license = request.getLicense();
+		this.gender = request.getGender();
+		this.phone =request.getPhone();
+		this.address = request.getAddress();
+	}
+	
 	public Long getId() {
 		return id;
 	}

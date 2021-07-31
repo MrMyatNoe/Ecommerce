@@ -37,6 +37,7 @@ public class DriverServiceImpl implements IDriverService {
 //		if (!d.getLicense().equals(LICENSE_REGEX)) {
 //			throw new FormatException("Please Check your License number");
 //		}
+		System.out.println("driver in service "+ d);
 		d.setCreated_date(System.currentTimeMillis());
 		d.setUpdated_date(d.getCreated_date());
 		return driverRepo.save(d);

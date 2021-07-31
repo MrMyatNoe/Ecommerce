@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.demo.ecom.request.CarRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 
@@ -21,22 +22,29 @@ public class Car {
 
 	@NotNull
 	private String carNo;
-
+	
+	
+	@NotNull
+	private String brand;
+	
 	@NotNull
 	private String name;
 
 	@NotNull
-	private String modelYear;
+	private int modelYear;
 
-	private Long startedDate;
+	@NotNull
+	private String startedDate;
 
 	private String photo;
 
 	@NotNull
 	private String color;
 
+	@NotNull
 	private String taxiNo;
 	
+	@NotNull
 	private int dailyAmount;
 
 	@NotNull
@@ -54,6 +62,25 @@ public class Car {
 	@JsonIgnore
 	private Long updated_date;
 
+	/**
+	 * 
+	 */
+	public Car() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public Car(CarRequest request) {
+		this.carNo = request.getCarNo();
+		this.brand = request.getBrand();
+		this.name = request.getName();
+		this.modelYear = request.getModelYear();
+		this.startedDate = request.getStartedDate();
+		this.color = request.getColor();
+		this.taxiNo = request.getTaxiNo();
+		this.dailyAmount = request.getDailyAmount();
+		this.licenseDate = request.getLicenseDate();
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -78,19 +105,19 @@ public class Car {
 		this.name = name;
 	}
 
-	public String getModelYear() {
+	public int getModelYear() {
 		return modelYear;
 	}
 
-	public void setModelYear(String modelYear) {
+	public void setModelYear(int modelYear) {
 		this.modelYear = modelYear;
 	}
 
-	public Long getStartedDate() {
+	public String getStartedDate() {
 		return startedDate;
 	}
 
-	public void setStartedDate(Long startedDate) {
+	public void setStartedDate(String startedDate) {
 		this.startedDate = startedDate;
 	}
 

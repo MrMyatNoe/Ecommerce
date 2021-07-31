@@ -40,13 +40,15 @@ public class RoleController extends BaseController{
 	}
 		
 	@RequestMapping(method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> saveAdmin(@RequestBody Role role){
+	public ResponseEntity<Object> saveRole(@RequestBody Role role){
 		logInfo("save role");
 		try {
 //			long start = System.currentTimeMillis();
 //			long end = System.currentTimeMillis();
 //			System.out.println("Total time : "+ (end - start));
-			return successResponse(roleService.saveData(role));
+			role.setCreated_date(System.currentTimeMillis());
+			role.setUpdated_date(role.getCreated_date());
+			return successResponse(roleService.saveData(role).join());
 		} catch (DemoBasedException e) {
 			logError(e, e.getMessage());
 			return e.response();

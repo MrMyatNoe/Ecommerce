@@ -105,4 +105,11 @@ public class Role {
             throw new BadRequestException("Can't remove a role that has driver.");
         }
     }
+
+	@Override
+	public String toString() {
+		return "Role [id=" + id + ", name=" + name + ", level=" + level + ", created_date=" + created_date
+				+ ", updated_date=" + updated_date + "]";
+	}
+	
 }

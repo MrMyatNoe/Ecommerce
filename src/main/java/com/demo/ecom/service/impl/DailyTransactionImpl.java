@@ -22,6 +22,10 @@ public class DailyTransactionImpl implements IDailyTransactionService {
 
 	@Autowired
 	DailyTransactionRepository dailyTransRepo;
+	
+	public DailyTransactionImpl() {
+		
+	}
 
 	@Override
 	public CompletableFuture<DailyTransaction> saveData(DailyTransaction t) {

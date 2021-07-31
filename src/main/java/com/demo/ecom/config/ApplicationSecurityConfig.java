@@ -64,7 +64,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter{
 			.antMatchers("/v1/admins").permitAll()
 			.antMatchers("/v1/drivers").permitAll()
 			.antMatchers("/v1/roles").permitAll()
-			.antMatchers("/v1/cars").permitAll()
+			.antMatchers(HttpMethod.GET,"/v1/cars").permitAll()
 			.antMatchers("/v1/dailyTransactions").permitAll()
 			.antMatchers("/v1/tutorials").permitAll()
 			.antMatchers("/error").permitAll()

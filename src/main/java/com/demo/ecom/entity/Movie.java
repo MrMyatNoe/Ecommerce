@@ -3,12 +3,18 @@
  */
 package com.demo.ecom.entity;
 
+import java.io.Serializable;
+
 /**
  * @author msi
  *
  */
-public class Movie {
+public class Movie implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String movieId;
 	private String name;
 
@@ -16,7 +22,7 @@ public class Movie {
 	 * 
 	 */
 	public Movie() {
-		// TODO Auto-generated constructor stub
+		super();
 	}
 	
 	/**

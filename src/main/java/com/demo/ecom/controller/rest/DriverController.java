@@ -37,13 +37,15 @@ import com.demo.ecom.entity.Driver;
 import com.demo.ecom.entity.Role;
 import com.demo.ecom.entity.UserSession;
 import com.demo.ecom.exception.DemoBasedException;
+import com.demo.ecom.request.DriverRequest;
 import com.demo.ecom.response.JwtResponse;
 import com.demo.ecom.service.IDriverService;
 import com.demo.ecom.service.IRoleService;
 import com.demo.ecom.service.IUserSessionService;
+import com.demo.ecom.util.DateTimeUtility;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -75,43 +77,50 @@ public class DriverController extends BaseController {
 	@Autowired
 	JwtUtils jwtUtils;
 	
-	private static final String path = "/home/tmn/public/Ecommerce/Images";
-
+	private String path = DateTimeUtility.path + "/drivers/";
+	final String roleName = "Driver";
+	
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public synchronized ResponseEntity<Object> saveDriver(@RequestParam("file") MultipartFile file,
 			@RequestParam("driver") String driver)
 			throws JsonMappingException, JsonProcessingException, DemoBasedException {
 		File serverFile = null;
 		try {
-			Driver d = new ObjectMapper().readValue(driver, Driver.class);
-			boolean pathExists = new File(path+ "/Drivers").exists();
+			System.out.println("save driver :"+file.getOriginalFilename() + " : " + driver );
+			
+			Gson gson = new Gson();
+			DriverRequest d = gson.fromJson(driver, DriverRequest.class);
+			System.out.println(d.toString());
+			boolean pathExists = new File(path).exists();
 			if (!pathExists) {
-				new File(path+ "/Drivers").mkdir();
+				new File(path).mkdir();
 			} else {
-				new File(path+ "/Drivers/" + d.getName()).mkdir();
+				new File(path + d.getName()).mkdir();
 			}
 			
 			String originalFileName = file.getOriginalFilename();
 			String newFileName = FilenameUtils.getBaseName(originalFileName) + "."
 					+ FilenameUtils.getExtension(originalFileName);
-			serverFile = new File(path+ "/Drivers/" + d.getName()  + File.separator + newFileName);
+			serverFile = new File(path + d.getName()  + File.separator + newFileName);
 			try {
 				FileUtils.writeByteArrayToFile(serverFile, file.getBytes());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			final String roleName = "Driver";
+			
 			Role role = roleService.findByName(roleName);
-			d.setPassword(passcodeEncoder.encode(d.getPassword()));
-			d.setImageName(serverFile.toString());
-			d.setRole(role);
-			return successResponse(driverService.saveData(d));
+			Driver savedDriver = new Driver(d);
+			savedDriver.setPassword(passcodeEncoder.encode(d.getPassword()));
+			savedDriver.setImageName(serverFile.toString());
+			savedDriver.setRole(role);
+			System.out.println(savedDriver);
+			return successResponse(driverService.saveData(savedDriver));
 		} catch (DemoBasedException e) {
 			// TODO server file remove
 			serverFile.delete();	
 			logError(e, e.getMessage());
 			return e.response();
-		}
+		} 
 	}
 	
 	@ApiOperation(value = "Get All Drivers",response = Iterable.class, tags = "getAllDrivers")

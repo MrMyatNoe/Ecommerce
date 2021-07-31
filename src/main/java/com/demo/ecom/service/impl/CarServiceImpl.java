@@ -23,7 +23,6 @@ public class CarServiceImpl implements ICarService {
 
 	@Override
 	public Car saveData(Car t) {
-		t.setStartedDate(System.currentTimeMillis());
 		t.setCreated_date(System.currentTimeMillis());
 		t.setUpdated_date(t.getCreated_date());
 		return this.carRepo.save(t);

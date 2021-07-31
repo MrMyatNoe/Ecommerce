@@ -21,7 +21,7 @@ public class RoleServiceImpl implements IRoleService {
 
 	@Autowired
 	RoleRepository roleRepo;
-	
+
 	@Override
 	public CompletableFuture<List<Role>> getAllDatas() {
 		return CompletableFuture.completedFuture(roleRepo.findAll());
@@ -29,12 +29,9 @@ public class RoleServiceImpl implements IRoleService {
 
 	@Override
 	public CompletableFuture<Role> saveData(Role r) {
-		if (existByName(r.getName())) {
-			throw new AlreadyExistsException("Category already exists");
-		}
-		r.setCreated_date(System.currentTimeMillis());
-		r.setUpdated_date(r.getCreated_date());
-		roleRepo.save(r);
+		if (existByName(r)) 
+			throw new AlreadyExistsException("Role already exists");
+		this.roleRepo.save(r);
 		return CompletableFuture.completedFuture(r);
 	}
 
@@ -58,16 +55,17 @@ public class RoleServiceImpl implements IRoleService {
 		return CompletableFuture.completedFuture(searchRole);
 	}
 
-	public boolean existByName(String name) {
-		return findByName(name) != null;
+	private boolean existByName(Role r) {
+		Role existRole = roleRepo.findByName(r.getName());
+		return existRole !=null &&  existRole.getId() > 0 && existRole.getId() != r.getId() ;
 	}
-
+	
 	@Override
-	public Role findByName(String name) {
-		try {
-			return roleRepo.findByName(name);
-		} catch (DemoBasedException e) {
+	public Role findByName(String name) throws DemoBasedException {
+		Role role = roleRepo.findByName(name);
+		if (role == null) {
 			throw new NotFoundException("Role Not Found!" + name);
 		}
+		return roleRepo.findByName(name);
 	}
 }
