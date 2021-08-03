@@ -38,11 +38,15 @@ public class DailyTransactionController extends BaseController{
 		Car car = null;
 		Driver driver = null;
 		try {
-			DailyTransaction dt = new DailyTransaction(request);
+			DailyTransaction dt = new DailyTransaction();
 			car = carService.getDataById(request.getCarId());
 			driver = driverService.getDataById(request.getDriverId());
 			dt.setCar(car);
 			dt.setDriver(driver);
+			dt.setPaid(request.getPaid());
+			dt.setTotal(request.getTotal());
+			dt.setStartedDate(request.getStartedDate());
+			dt.setEndDate(request.getEndDate());
 			return successResponse(dailyTransactionService.saveData(dt));
 		} catch (DemoBasedException e) {
 			logError(e, e.getMessage());
@@ -69,7 +73,7 @@ public class DailyTransactionController extends BaseController{
 		Car car = null;
 		Driver driver = null;
 		try {
-			DailyTransaction dt = new DailyTransaction(request);
+			DailyTransaction dt = new DailyTransaction();
 			car = carService.getDataById(request.getCarId());
 			driver = driverService.getDataById(request.getDriverId());
 			dt.setCar(car);

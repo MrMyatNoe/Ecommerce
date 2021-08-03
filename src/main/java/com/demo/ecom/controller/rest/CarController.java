@@ -8,7 +8,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +41,6 @@ public class CarController extends BaseController{
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Object> getDataById(@PathVariable("id") Long id){
 		logInfo("Get Car By Id");
 		return successResponse(carService.getDataById(id));

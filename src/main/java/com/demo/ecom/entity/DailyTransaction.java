@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.demo.ecom.request.DailyTransactionRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -18,10 +17,12 @@ public class DailyTransaction {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String transactionCode;
-	private String status; // DAILY, REPAIR, ABSENT
-	private double amount = 0.0;
-	private double fee = 0.0;
-	private double totalAmount = 0.0;
+	private int daily;
+	private int paid;
+	private int remain;
+	private int total;
+	private String startedDate;
+	private String endDate;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "car_id", nullable = false)
@@ -39,14 +40,6 @@ public class DailyTransaction {
 	
 	public DailyTransaction() {}
 	
-	public DailyTransaction(DailyTransactionRequest request) {
-		this.id = request.getId();
-		this.status = request.getStatus();
-		this.amount = request.getAmount();
-		this.fee = request.getFee();
-		System.out.println("this is enity constructor" + this.status + " " + this.amount + " " + this.getFee());
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -62,37 +55,53 @@ public class DailyTransaction {
 	public void setTransactionCode(String transactionCode) {
 		this.transactionCode = transactionCode;
 	}
-
-	public String getStatus() {
-		return status;
+	
+	public int getDaily() {
+		return daily;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setDaily(int daily) {
+		this.daily = daily;
 	}
 
-	public double getAmount() {
-		return amount;
+	public int getPaid() {
+		return paid;
 	}
 
-	public void setAmount(double amount) {
-		this.amount = amount;
+	public void setPaid(int paid) {
+		this.paid = paid;
 	}
 
-	public double getFee() {
-		return fee;
+	public int getRemain() {
+		return remain;
 	}
 
-	public void setFee(double fee) {
-		this.fee = fee;
+	public void setRemain(int remain) {
+		this.remain = remain;
+	}
+	
+	public int getTotal() {
+		return total;
 	}
 
-	public double getTotalAmount() {
-		return totalAmount;
+	public void setTotal(int total) {
+		this.total = total;
 	}
 
-	public void setTotalAmount(double totalAmount) {
-		this.totalAmount = totalAmount;
+	public String getStartedDate() {
+		return startedDate;
+	}
+
+	public void setStartedDate(String startedDate) {
+		this.startedDate = startedDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
 	}
 
 	public Car getCar() {
@@ -129,9 +138,9 @@ public class DailyTransaction {
 
 	@Override
 	public String toString() {
-		return "DailyTransaction [id=" + id + ", transactionCode=" + transactionCode + ", status=" + status
-				+ ", amount=" + amount + ", fee=" + fee + ", totalAmount=" + totalAmount + ", car=" + car + ", driver="
-				+ driver + ", created_date=" + created_date + ", updated_date=" + updated_date + "]";
+		return "DailyTransaction [id=" + id + ", transactionCode=" + transactionCode + ", daily=" + daily + ", paid="
+				+ paid + ", remain=" + remain + ", total=" + total + ", startedDate=" + startedDate + ", endDate="
+				+ endDate + ", created_date=" + created_date + ", updated_date=" + updated_date + "]";
 	}
 
 }
