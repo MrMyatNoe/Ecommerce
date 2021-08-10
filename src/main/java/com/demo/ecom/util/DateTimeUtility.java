@@ -9,6 +9,10 @@ public class DateTimeUtility {
 	/**
 	 * in window
 	 */
+	//public static final String path=  "D:/Ecommerce/Images";
+	/**
+	 * in linux
+	 */
 	public static final String path=  "D:/Ecommerce/Images";
 
 	public static String dateFormatYearMonthDay() {

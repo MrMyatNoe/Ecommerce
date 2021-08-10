@@ -17,12 +17,13 @@ public class DailyTransaction {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String transactionCode;
-	private int daily;
-	private int paid;
-	private int remain;
-	private int total;
 	private String startedDate;
 	private String endDate;
+	private int daily;
+	private int days;
+	private int total;
+	private int paid;
+	private int remain;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "car_id", nullable = false)
@@ -31,15 +32,16 @@ public class DailyTransaction {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "driver_id", nullable = false)
 	private Driver driver;
-	
+
 	@JsonIgnore
 	private long created_date;
 
 	@JsonIgnore
 	private long updated_date;
-	
-	public DailyTransaction() {}
-	
+
+	public DailyTransaction() {
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -54,38 +56,6 @@ public class DailyTransaction {
 
 	public void setTransactionCode(String transactionCode) {
 		this.transactionCode = transactionCode;
-	}
-	
-	public int getDaily() {
-		return daily;
-	}
-
-	public void setDaily(int daily) {
-		this.daily = daily;
-	}
-
-	public int getPaid() {
-		return paid;
-	}
-
-	public void setPaid(int paid) {
-		this.paid = paid;
-	}
-
-	public int getRemain() {
-		return remain;
-	}
-
-	public void setRemain(int remain) {
-		this.remain = remain;
-	}
-	
-	public int getTotal() {
-		return total;
-	}
-
-	public void setTotal(int total) {
-		this.total = total;
 	}
 
 	public String getStartedDate() {
@@ -104,6 +74,46 @@ public class DailyTransaction {
 		this.endDate = endDate;
 	}
 
+	public int getDaily() {
+		return daily;
+	}
+
+	public void setDaily(int daily) {
+		this.daily = daily;
+	}
+
+	public int getDays() {
+		return days;
+	}
+
+	public void setDays(int days) {
+		this.days = days;
+	}
+
+	public int getTotal() {
+		return total;
+	}
+
+	public void setTotal(int total) {
+		this.total = total;
+	}
+
+	public int getPaid() {
+		return paid;
+	}
+
+	public void setPaid(int paid) {
+		this.paid = paid;
+	}
+
+	public int getRemain() {
+		return remain;
+	}
+
+	public void setRemain(int remain) {
+		this.remain = remain;
+	}
+
 	public Car getCar() {
 		return car;
 	}
@@ -119,7 +129,7 @@ public class DailyTransaction {
 	public void setDriver(Driver driver) {
 		this.driver = driver;
 	}
-	
+
 	public long getCreated_date() {
 		return created_date;
 	}
@@ -138,9 +148,9 @@ public class DailyTransaction {
 
 	@Override
 	public String toString() {
-		return "DailyTransaction [id=" + id + ", transactionCode=" + transactionCode + ", daily=" + daily + ", paid="
-				+ paid + ", remain=" + remain + ", total=" + total + ", startedDate=" + startedDate + ", endDate="
-				+ endDate + ", created_date=" + created_date + ", updated_date=" + updated_date + "]";
+		return "DailyTransaction [id=" + id + ", transactionCode=" + transactionCode + ", startedDate=" + startedDate
+				+ ", endDate=" + endDate + ", daily=" + daily + ", days=" + days + ", total=" + total + ", paid=" + paid
+				+ ", remain=" + remain + ", created_date=" + created_date + ", updated_date=" + updated_date + "]";
 	}
 
 }
