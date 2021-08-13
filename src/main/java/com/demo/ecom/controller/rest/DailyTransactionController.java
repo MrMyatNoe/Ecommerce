@@ -1,5 +1,7 @@
 package com.demo.ecom.controller.rest;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,10 @@ import com.demo.ecom.request.DailyTransactionRequest;
 import com.demo.ecom.service.ICarService;
 import com.demo.ecom.service.IDailyTransactionService;
 import com.demo.ecom.service.IDriverService;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/v1/dailyTransactions")
@@ -52,14 +58,28 @@ public class DailyTransactionController extends BaseController{
 			logError(e, e.getMessage());
 			return e.response();
 		}
-		
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> getAllDatas(){
-		logInfo("Get all daily transactions");
-		return successResponse(dailyTransactionService.getAllDatas().join());
-	}
+	@ApiOperation(value = "Get All Tutorials", response = Iterable.class, tags = "getTutotrialsByPageAndSize")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 401, message = "not authorized!"), @ApiResponse(code = 403, message = "forbidden!!"),
+            @ApiResponse(code = 404, message = "not found!!") })
+    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> getTutotrialsByPageAndSize(
+            @RequestParam(name = "page") int page, @RequestParam(name = "size") int size) {
+	    try {
+            logInfo("Get All Tutorials By title or Page And Size");
+            List<DailyTransaction> list = dailyTransactionService.getDatasByPageAndSize(page, size);
+            for (DailyTransaction dailyTransaction : list) {
+                dailyTransaction.setCarNo(dailyTransaction.getCar().getCarNo());
+                dailyTransaction.setDriverName(dailyTransaction.getDriver().getName());
+            }
+            return successResponse(list);
+        } catch (DemoBasedException e) {
+            logError(e, e.getMessage());
+            return e.response();
+        }
+    }
 	
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
 	public ResponseEntity<Object> getDataById(@PathVariable("id") Long id){
@@ -70,12 +90,10 @@ public class DailyTransactionController extends BaseController{
 	@RequestMapping(method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> putData(@RequestBody DailyTransactionRequest request){
 		logInfo("edit daily transactions");
-		Car car = null;
-		Driver driver = null;
 		try {
 			DailyTransaction dt = new DailyTransaction();
-			car = carService.getDataById(request.getCarId());
-			driver = driverService.getDataById(request.getDriverId());
+			Car car = carService.getDataById(request.getCarId());
+			Driver driver = driverService.getDataById(request.getDriverId());
 			dt.setCar(car);
 			dt.setDriver(driver);
 			return successResponse(dailyTransactionService.updateData(dt).join());

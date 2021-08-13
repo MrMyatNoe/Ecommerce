@@ -13,10 +13,22 @@ public class DateTimeUtility {
 	/**
 	 * in linux
 	 */
-	public static final String path=  "D:/Ecommerce/Images";
+	// OS validator
+	public static String path=  "D:/Ecommerce/Images";
 
 	public static String dateFormatYearMonthDay() {
 		return sdf.format(new Date()).toString();
+	}
+	
+	public static String getSystemPhotoPath() {
+	    final String window = "Window";
+        //final String linux = "Linux";
+        if (System.getProperty("os.name").equalsIgnoreCase(window)) {
+            path = "D:/Ecommerce/Images";
+        } else {
+            path = "/home/tmn/public/Ecommerce/Images";
+        }
+        return path;
 	}
 	
 }

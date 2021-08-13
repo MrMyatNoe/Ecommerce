@@ -77,7 +77,7 @@ public class DriverController extends BaseController {
 	@Autowired
 	JwtUtils jwtUtils;
 	
-	private String path = DateTimeUtility.path + "/drivers/";
+	private String path = DateTimeUtility.getSystemPhotoPath()+ "/drivers/";
 	final String roleName = "Driver";
 	
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)

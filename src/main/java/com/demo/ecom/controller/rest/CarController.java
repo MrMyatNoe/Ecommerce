@@ -32,7 +32,7 @@ public class CarController extends BaseController{
 	@Autowired
 	ICarService carService;
 	
-	private String path = DateTimeUtility.path + "/Cars/";	
+	private String path = DateTimeUtility.getSystemPhotoPath() + "/Cars/";	
 	
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> getAllDatas(){

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.demo.ecom.entity.DailyTransaction;
@@ -14,17 +16,9 @@ import com.demo.ecom.service.IDailyTransactionService;
 @Service
 public class DailyTransactionImpl implements IDailyTransactionService {
 
-	enum TransactionType {
-		OWNER, FEE, REST
-	}
-
 	@Autowired
 	DailyTransactionRepository dailyTransRepo;
 	
-	public DailyTransactionImpl() {
-		
-	}
-
 	@Override
 	public CompletableFuture<DailyTransaction> saveData(DailyTransaction t) {
 		int remain = t.getTotal() - t.getPaid();
@@ -63,5 +57,15 @@ public class DailyTransactionImpl implements IDailyTransactionService {
 	public void deleteById(long id) {
 		dailyTransRepo.deleteById(id);
 	}
+
+    @Override
+    public List<DailyTransaction> getDatasByPageAndSize(int page, int size) {
+        System.out.println(page + " : "+ size);
+        Page<DailyTransaction> pages = dailyTransRepo.findAll(PageRequest.of(page, size));
+   
+        List<DailyTransaction> list = pages.getContent();
+        System.out.println(list.size());
+        return list;
+    }
 	
 }
