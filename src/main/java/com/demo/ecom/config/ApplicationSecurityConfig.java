@@ -50,28 +50,33 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors()
-			.and()
-			.csrf()
-			.disable()
-			.sessionManagement()
-			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and()
-			.authorizeRequests()
-			.antMatchers(HttpMethod.POST,"/v1/admins/login").permitAll()
-			.antMatchers("/v1/dailyTransactions").permitAll()
-			.antMatchers(HttpMethod.POST,"/v1/drivers/resetpassword").permitAll()
-			.antMatchers(HttpMethod.POST,"/v1/drivers/login").permitAll()
-			.antMatchers("/v1/admins").permitAll()
-			.antMatchers("/v1/drivers").permitAll()
-			.antMatchers("/v1/roles").permitAll()
-			.antMatchers("/v1/cars").permitAll()
-			.antMatchers("/v1/dailyTransactions").permitAll()
-			.antMatchers("/v1/tutorials").permitAll()
-			.antMatchers("/error").permitAll()
-			.anyRequest().authenticated();
+//		http.cors()
+//			.and()
+//			.csrf()
+//			.disable()
+//			.sessionManagement()
+//			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//			.and()
+//			.authorizeRequests()
+//			//.antMatchers(HttpMethod.POST,"/v1/admins/login").permitAll()
+//			//.antMatchers(HttpMethod.POST,"/v1/drivers/resetpassword").permitAll()
+//			//.antMatchers(HttpMethod.POST,"/v1/drivers/login").permitAll()
+//			.antMatchers("/v1/admins").permitAll()
+//			.antMatchers("/v1/drivers").permitAll()
+//			.antMatchers("/v1/roles").permitAll()
+//			.antMatchers("/v1/cars").permitAll()
+//			.antMatchers("/v1/dailyTransactions").permitAll()
+//			.antMatchers("/v1/tutorials").permitAll()
+//			.antMatchers("/error").permitAll()
+//			.anyRequest().authenticated();
 			//.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 
+	    http
+	        .cors()
+	        .and()
+	        .csrf()
+	        .disable()
+	        .authorizeRequests().anyRequest().permitAll();
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
 	}

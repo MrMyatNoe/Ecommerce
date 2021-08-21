@@ -31,8 +31,7 @@ public class RoleServiceImpl implements IRoleService {
 	public CompletableFuture<Role> saveData(Role r) {
 		if (existByName(r)) 
 			throw new AlreadyExistsException("Role already exists");
-		this.roleRepo.save(r);
-		return CompletableFuture.completedFuture(r);
+		return CompletableFuture.completedFuture(this.roleRepo.save(r));
 	}
 
 	@Override

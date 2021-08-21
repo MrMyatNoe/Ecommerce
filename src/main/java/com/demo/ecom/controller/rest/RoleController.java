@@ -13,14 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.demo.ecom.entity.Category;
 import com.demo.ecom.entity.Role;
 import com.demo.ecom.exception.DemoBasedException;
 import com.demo.ecom.service.IRoleService;
-
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/v1/roles")
@@ -80,16 +75,13 @@ public class RoleController extends BaseController{
 		}
 	}
 	
-	@ApiOperation(value = "Get Role By Id", response = Category.class, tags = "getRoleById")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
-			@ApiResponse(code = 401, message = "not authorized!"), @ApiResponse(code = 403, message = "forbidden!!"),
-			@ApiResponse(code = 404, message = "not found!!") })
-	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
-	// @PreAuthorize("hasRole('ADMIN')")
-	public synchronized ResponseEntity<Object> getRoleById(@PathVariable("id") Long id) {
+	@RequestMapping(method = RequestMethod.GET, 
+	        produces = MediaType.APPLICATION_JSON_VALUE, 
+	        value = "/{id}")
+	public ResponseEntity<Object> getRoleById(@PathVariable("id") Long id) {
 		logInfo("Get Role By Id");
 		try {
-			return successResponse(roleService.getDataById(id));
+			return successResponse(roleService.getDataById(id).join());
 		} catch (DemoBasedException e) {
 			logError(e, e.getMessage());
 			return e.response();
