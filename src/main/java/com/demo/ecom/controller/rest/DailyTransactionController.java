@@ -38,16 +38,16 @@ public class DailyTransactionController extends BaseController{
 	@Autowired
 	IDriverService driverService;
 	
-	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> getAllDatas(){
-        logInfo("Get All Daily");
-        List<DailyTransaction> list = dailyTransactionService.getAllDatas().join();
-        for (DailyTransaction dailyTransaction : list) {
-            dailyTransaction.setCarNo(dailyTransaction.getCar().getCarNo());
-            dailyTransaction.setDriverName(dailyTransaction.getDriver().getName());
-        }
-        return successResponse(list);
-    }
+//	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<Object> getAllDatas(){
+//        logInfo("Get All Daily");
+//        List<DailyTransaction> list = dailyTransactionService.getAllDatas().join();
+//        for (DailyTransaction dailyTransaction : list) {
+//            dailyTransaction.setCarNo(dailyTransaction.getCar().getCarNo());
+//            dailyTransaction.setDriverName(dailyTransaction.getDriver().getName());
+//        }
+//        return successResponse(list);
+//    }
 	
 	@RequestMapping(method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> saveTransaction(@RequestBody DailyTransactionRequest request){
@@ -71,26 +71,26 @@ public class DailyTransactionController extends BaseController{
 		}
 	}
 	
-//	@ApiOperation(value = "Get All Tutorials", response = Iterable.class, tags = "getTutotrialsByPageAndSize")
-//    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
-//            @ApiResponse(code = 401, message = "not authorized!"), @ApiResponse(code = 403, message = "forbidden!!"),
-//            @ApiResponse(code = 404, message = "not found!!") })
-//    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<Object> getTutotrialsByPageAndSize(
-//            @RequestParam(name = "page") int page, @RequestParam(name = "size") int size) {
-//	    try {
-//            logInfo("Get All Tutorials By title or Page And Size");
-//            List<DailyTransaction> list = dailyTransactionService.getDatasByPageAndSize(page, size);
-//            for (DailyTransaction dailyTransaction : list) {
-//                dailyTransaction.setCarNo(dailyTransaction.getCar().getCarNo());
-//                dailyTransaction.setDriverName(dailyTransaction.getDriver().getName());
-//            }
-//            return successResponse(list);
-//        } catch (DemoBasedException e) {
-//            logError(e, e.getMessage());
-//            return e.response();
-//        }
-//    }
+	@ApiOperation(value = "Get All Daily", response = Iterable.class, tags = "getDailyByPageAndSize")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 401, message = "not authorized!"), @ApiResponse(code = 403, message = "forbidden!!"),
+            @ApiResponse(code = 404, message = "not found!!") })
+    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> getDailysByPageAndSize(
+            @RequestParam(name = "page") int page, @RequestParam(name = "size") int size) {
+	    try {
+            logInfo("Get All Daily By title or Page And Size");
+            List<DailyTransaction> list = dailyTransactionService.getDatasByPageAndSize(page, size);
+            for (DailyTransaction dailyTransaction : list) {
+                dailyTransaction.setCarNo(dailyTransaction.getCar().getCarNo());
+                dailyTransaction.setDriverName(dailyTransaction.getDriver().getName());
+            }
+            return successResponse(list);
+        } catch (DemoBasedException e) {
+            logError(e, e.getMessage());
+            return e.response();
+        }
+    }
 	
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
 	public ResponseEntity<Object> getDataById(@PathVariable("id") Long id){
