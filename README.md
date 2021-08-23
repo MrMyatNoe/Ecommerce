@@ -2,8 +2,8 @@
 
 Backend Project for Car Management System, including CRUD operations and unit test cases, Mockito Test case
 
-First You must install java 8 on your pc
+1. First You must install at least jdk 8 on your pc
 
-After cloning ,run maven install
+2. run maven install
 
-You can check localhost:8080/swagger-ui.html
+3. You can check localhost:8080/swagger-ui.html
