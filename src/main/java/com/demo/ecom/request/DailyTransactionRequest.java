@@ -11,8 +11,10 @@ public class DailyTransactionRequest implements Serializable {
 	private long id;
 	private String startedDate;
 	private String endDate;
+	private String remark;
 	private int paid;
 	private int total;
+	private int day;
 	private long carId;
 	private long driverId;
 
@@ -43,7 +45,15 @@ public class DailyTransactionRequest implements Serializable {
 		this.endDate = endDate;
 	}
 	
-	public int getPaid() {
+	public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public int getPaid() {
 		return paid;
 	}
 
@@ -51,7 +61,15 @@ public class DailyTransactionRequest implements Serializable {
 		this.paid = paid;
 	}
 	
-	public int getTotal() {
+	public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
+    }
+
+    public int getTotal() {
 		return total;
 	}
 
@@ -75,10 +93,11 @@ public class DailyTransactionRequest implements Serializable {
 		this.driverId = driverId;
 	}
 
-	@Override
-	public String toString() {
-		return "DailyTransactionRequest [id=" + id + ", startedDate=" + startedDate + ", endDate=" + endDate + ", paid="
-				+ paid + ", total=" + total + ", carId=" + carId + ", driverId=" + driverId + "]";
-	}
+    @Override
+    public String toString() {
+        return "DailyTransactionRequest [id=" + id + ", startedDate=" + startedDate + ", endDate=" + endDate
+                + ", remark=" + remark + ", paid=" + paid + ", total=" + total + ", day=" + day + ", carId=" + carId
+                + ", driverId=" + driverId + "]";
+    }
 
 }
