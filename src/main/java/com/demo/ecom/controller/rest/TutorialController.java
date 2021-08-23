@@ -68,7 +68,7 @@ public class TutorialController extends BaseController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
 			@ApiResponse(code = 401, message = "not authorized!"), @ApiResponse(code = 403, message = "forbidden!!"),
 			@ApiResponse(code = 404, message = "not found!!") })
-	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
+	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, path = "/{id}")
 	public synchronized ResponseEntity<Object> getTutorialById(@PathVariable("id") Long id) {
 		logInfo("Get Tutorial By Id");
 		return successResponse(tutoService.getDataById(id));
@@ -126,7 +126,7 @@ public class TutorialController extends BaseController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
 			@ApiResponse(code = 401, message = "not authorized!"), @ApiResponse(code = 403, message = "forbidden!!"),
 			@ApiResponse(code = 404, message = "not found!!") })
-	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, value = "/published")
+	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, path = "/published")
 	public synchronized ResponseEntity<Object> getPublishedCounts() {
 		logInfo("Published Count");
 		return successResponse(tutoService.getPublishedCounts());

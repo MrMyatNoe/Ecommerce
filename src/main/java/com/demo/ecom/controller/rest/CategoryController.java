@@ -45,7 +45,7 @@ public class CategoryController extends BaseController{
 			@ApiResponse(code = 403, message = "forbidden!!"),
 			@ApiResponse(code = 404, message = "not found!!")
 	})
-	@RequestMapping(method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
+	@RequestMapping(method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_VALUE, path = "/{id}")
 	//@PreAuthorize("hasRole('ADMIN')")
 	public synchronized ResponseEntity<Object> getCategoryById(@PathVariable("id") Long id){
 		logInfo("Get Category By Id");
