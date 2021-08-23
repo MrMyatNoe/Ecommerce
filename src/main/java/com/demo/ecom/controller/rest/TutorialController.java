@@ -52,7 +52,6 @@ public class TutorialController extends BaseController {
 				pageTuts = tutoService.getDatasByPageAndSize(page, size);
 			else
 				pageTuts = tutoService.getDatasByTitlePageSize(title, page, size);
-
 			Map<String, Object> response = new HashMap<>();
 			response.put("tutorials", pageTuts.getContent());
 			response.put("currentPage", pageTuts.getNumber());

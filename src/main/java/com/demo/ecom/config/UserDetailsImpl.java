@@ -10,55 +10,71 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.demo.ecom.entity.Admin;
+import com.demo.ecom.entity.Driver;
 
-public class UserDetailsImpl implements UserDetails{
+/**
+ * @author tmn
+ *
+ */
+public class UserDetailsImpl implements UserDetails {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private Long id;
-	
+
 	private String username;
-	
+
 	private String email;
 	
+	private String phone;
+
 	private String password;
-	
+
 	private Collection<? extends GrantedAuthority> authorities;
-	
-	public UserDetailsImpl(Long id, String username, String email, String password,
+
+	public UserDetailsImpl(Long id, String username,String email,String phone, String password,
 			Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
+		this.phone = phone;
 		this.password = password;
 		this.authorities = authorities;
 	}
-
+	
 	public static UserDetailsImpl buildAdmin(Admin admin) {
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		SimpleGrantedAuthority a = new SimpleGrantedAuthority(admin.getRole().getName());
 		authorities.add(a);
-		return new UserDetailsImpl(admin.getId(), 
-						admin.getName(),
-						admin.getEmail(), 
-						admin.getPassword(), 
-						authorities);
+		return new UserDetailsImpl(admin.getId(), admin.getName(), admin.getEmail(),null, admin.getPassword(), authorities);
 	}
-	
+
+	public static UserDetailsImpl buildDriver(Driver driver) {
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		SimpleGrantedAuthority a = new SimpleGrantedAuthority(driver.getRole().getName());
+		authorities.add(a);
+		return new UserDetailsImpl(driver.getId(), driver.getName(), null,driver.getPhone(), driver.getPassword(),
+				authorities);
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return authorities;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
 
 	public String getEmail() {
 		return email;
+	}
+	
+	public String getPhone() {
+		return phone;
 	}
 
 	@Override
@@ -95,7 +111,7 @@ public class UserDetailsImpl implements UserDetails{
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		
+
 		if (obj == null || getClass() != obj.getClass())
 			return false;
 		UserDetailsImpl other = (UserDetailsImpl) obj;

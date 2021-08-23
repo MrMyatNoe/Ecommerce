@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.demo.ecom.entity.UserSession;
+import com.demo.ecom.exception.DemoBasedException;
 import com.demo.ecom.repository.UserSessionRepository;
 import com.demo.ecom.service.IUserSessionService;
 
@@ -21,10 +22,10 @@ public class UserSessionServiceImpl implements IUserSessionService{
 	}
 
 	@Override
-	public UserSession saveData(UserSession us) {
-		us.setCreatedDate(System.currentTimeMillis());
-		us.setUpdatedDate(us.getCreatedDate());
-		return userSessionRepository.save(us);
+	public UserSession saveData(UserSession u) {
+		u.setCreated_date(System.currentTimeMillis());
+		u.setUpdated_date(u.getCreated_date());
+		return userSessionRepository.save(u);
 	}
 
 	@Override
@@ -32,8 +33,8 @@ public class UserSessionServiceImpl implements IUserSessionService{
 		UserSession oldUserSession = getDataById(us.getId());
 		us.setExpireTime(System.currentTimeMillis());
 
-		us.setCreatedDate(oldUserSession.getCreatedDate());
-		us.setUpdatedDate(System.currentTimeMillis());
+		us.setCreated_date(oldUserSession.getCreated_date());
+		us.setUpdated_date(System.currentTimeMillis());
 		return userSessionRepository.save(us);
 	}
 
@@ -49,9 +50,29 @@ public class UserSessionServiceImpl implements IUserSessionService{
 	}
 
 	@Override
-	public UserSession getUserSessionByEmailandIPAddress(String email, String ipAddress) {
-		UserSession userSession = userSessionRepository.getUserSessionByEmail(email);
+	public UserSession getUserSessionByEmailandIPAddress(String email, String ipAddress) 
+			throws DemoBasedException, Exception {
+		UserSession userSession = userSessionRepository.getUserSessionByEmail(email,ipAddress);
+		System.out.println("user session " + userSession);
 		if(userSession == null || !ipAddress.equals(userSession.getIpAddress())) {
+			return null;
+		}
+		return userSession;
+	}
+
+	@Override
+	public UserSession getUserSessionByPhoneandIPAddress(String phone, String ipAddress) throws DemoBasedException, Exception {
+		UserSession userSession = userSessionRepository.getUserSessionByPhone(phone,ipAddress);
+		if(userSession == null || !ipAddress.equals(userSession.getIpAddress())) {
+			return null;
+		}
+		return userSession;
+	}
+
+	@Override
+	public UserSession getUserSessionByToken(String token) {
+		UserSession userSession = userSessionRepository.getUserSessionByToken(token);
+		if(userSession == null) {
 			return null;
 		}
 		return userSession;

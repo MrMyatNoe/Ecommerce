@@ -29,6 +29,10 @@ public class Role {
 	@OneToMany(mappedBy = "role",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	@JsonIgnore
 	private Set<Admin> admins;
+	
+	@OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	private Set<Driver> drivers;
 
 	@JsonIgnore
 	private long created_date;
@@ -83,18 +87,29 @@ public class Role {
 	public void setAdmins(Set<Admin> admins) {
 		this.admins = admins;
 	}
+	
+	public Set<Driver> getDrivers() {
+		return drivers;
+	}
+
+	public void setDrivers(Set<Driver> drivers) {
+		this.drivers = drivers;
+	}
 
 	@PreRemove
     public void checkReviewAssociationBeforeRemoval() {
         if (!this.admins.isEmpty()) {
             throw new BadRequestException("Can't remove a role that has admin.");
         }
+        if (!this.drivers.isEmpty()) {
+            throw new BadRequestException("Can't remove a role that has driver.");
+        }
     }
-	
+
 	@Override
 	public String toString() {
-		return "Role [id=" + id + ", name=" + name + ", level=" + level + ", admins=" + admins + ", created_date="
-				+ created_date + ", updated_date=" + updated_date + "]";
+		return "Role [id=" + id + ", name=" + name + ", level=" + level + ", created_date=" + created_date
+				+ ", updated_date=" + updated_date + "]";
 	}
-
+	
 }

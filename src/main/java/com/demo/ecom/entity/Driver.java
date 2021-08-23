@@ -2,17 +2,23 @@ package com.demo.ecom.entity;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.demo.ecom.request.DriverRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
 
 @Entity
-public class Driver {
+public class Driver{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,18 +41,45 @@ public class Driver {
 
 	@NotNull
 	private String phone;
+	
+	@NotNull
+	private String password;
 	private String imageName;
 
-	@OneToMany(mappedBy = "driver")
+	@OneToMany(mappedBy = "driver",
+			fetch = FetchType.LAZY, 
+			cascade = CascadeType.ALL,
+			orphanRemoval = false)
 	@JsonIgnore
 	private List<DailyTransaction> dailyList;
 
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "role_id",nullable = false)
+	private Role role;
+	
 	@JsonIgnore
 	private long created_date;
 
 	@JsonIgnore
 	private long updated_date;
 
+	/**
+	 * 
+	 */
+	public Driver() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public Driver(DriverRequest request) {
+		this.name = request.getName();
+		this.nrc = request.getNrc();
+		this.license = request.getLicense();
+		this.gender = request.getGender();
+		this.phone =request.getPhone();
+		this.address = request.getAddress();
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -102,6 +135,14 @@ public class Driver {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	public String getImageName() {
 		return imageName;
@@ -109,6 +150,14 @@ public class Driver {
 
 	public void setImageName(String imageName) {
 		this.imageName = imageName;
+	}
+	
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	public long getCreated_date() {
@@ -134,12 +183,13 @@ public class Driver {
 	public void setDailyList(List<DailyTransaction> dailyList) {
 		this.dailyList = dailyList;
 	}
-
+	
 	@Override
 	public String toString() {
-		return "Driver [id=" + id + ", name=" + name + ", nrc=" + nrc + ", gender=" + gender + ", license=" + license
-				+ ", address=" + address + ", phone=" + phone + ", imageName=" + imageName + ", created_date="
-				+ created_date + ", updated_date=" + updated_date + ", dailyList=" + dailyList + "]";
+		return "Driver [id=" + id + ", name=" + name + ", nrc=" + nrc + ", license=" + license + ", gender=" + gender
+				+ ", address=" + address + ", phone=" + phone + ", password=" + password + ", imageName=" + imageName
+				+ ", role=" + role + ", created_date=" + created_date + ", updated_date="
+				+ updated_date + "]";
 	}
 
 }

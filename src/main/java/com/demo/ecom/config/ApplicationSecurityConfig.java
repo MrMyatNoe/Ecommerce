@@ -1,38 +1,29 @@
 package com.demo.ecom.config;
 
-import static com.demo.ecom.config.ApplicationUserRole.ADMIN;
-import static com.demo.ecom.config.ApplicationUserRole.DRIVER;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * @author tmn
+ *
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) 
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter{
 
-//	private final PasswordEncoder encoder;
-//	
-//	@Autowired
-//	public ApplicationSecurityConfig(PasswordEncoder encoder) {
-//		this.encoder = encoder;
-//	}
-	
 	@Autowired
 	UserDetailsServiceImpl userDetailsService;
 	
@@ -52,51 +43,41 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter{
 		return new BCryptPasswordEncoder();
 	}
 	
-//	@Bean
-//	public AuthTokenFilter authenticationJwtTokenFilter() {
-//		return new AuthTokenFilter();
-//	}
+	@Bean
+	public AuthTokenFilter authenticationJwtTokenFilter() {
+		return new AuthTokenFilter();
+	}
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		
-//		 http
-//		 .csrf().and()
-//		 .cors().disable()
-//		 //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//        // .and()
-//         //.authorizeRequests()
-////         .antMatchers(HttpMethod.GET,"/api/v1/categories/**")
-//// 			.hasAuthority(ADMIN_READ.name())
-////         .antMatchers(HttpMethod.POST,"/api/v1/categories/**").hasRole(ADMIN.name())
-////         .antMatchers(HttpMethod.PUT,"/api/v1/categories/**").hasRole(ADMIN.name())
-////         .antMatchers(HttpMethod.DELETE,"/api/v1/categories/**").hasRole(ADMIN.name())
-////         
-////		 .anonymous()
-////        //.anyRequest()
-////         //.permitAll()
-////         //.authenticated()
-////         .and()
-////         .httpBasic();
-//	        .authorizeRequests()  
-//	            .anyRequest().authenticated()  
-//	            .and()  
-//	        .formLogin().and()  
-//	        .httpBasic(); 
-		 
-		// http.cors().and().csrf().disable()
-			//.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-			//.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-			//.and()
-			//.authorizeRequests().antMatchers("/api/v1/login").permitAll()
-			//.antMatchers("/api/test/**").permitAll()
-			//.anyRequest().authenticated();
+		http.cors()
+			.and()
+			.csrf()
+			.disable()
+			.sessionManagement()
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+			.authorizeRequests()
+			.antMatchers(HttpMethod.POST,"/v1/admins/login").permitAll()
+			.antMatchers(HttpMethod.POST,"/v1/drivers/resetpassword").permitAll()
+			.antMatchers(HttpMethod.POST,"/v1/drivers/login").permitAll()
+			.antMatchers("/v1/admins").permitAll()
+			.antMatchers("/v1/drivers").permitAll()
+			.antMatchers("/v1/roles").permitAll()
+			.antMatchers("/v1/cars").permitAll()
+			.antMatchers("/v1/dailyTransactions").permitAll()
+			.antMatchers("/v1/tutorials").permitAll()
+			.antMatchers("/error").permitAll()
+			.anyRequest().authenticated();
 
-		//http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+//	    http
+//	        .cors()
+//	        .and()
+//	        .csrf()
+//	        .disable()
+//	        .authorizeRequests().anyRequest().permitAll();
+//		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
-		http.csrf().disable();
-		
-		http.authorizeRequests().antMatchers("/api/v1/login").permitAll();
 	}
 
 //	@Override

@@ -2,8 +2,13 @@ package com.demo.ecom.controller.rest;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 
@@ -12,23 +17,41 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.demo.ecom.config.JwtUtils;
+import com.demo.ecom.config.UserDetailsImpl;
 import com.demo.ecom.entity.Driver;
+import com.demo.ecom.entity.Role;
+import com.demo.ecom.entity.UserSession;
 import com.demo.ecom.exception.DemoBasedException;
+import com.demo.ecom.request.DriverRequest;
+import com.demo.ecom.response.JwtResponse;
 import com.demo.ecom.service.IDriverService;
+import com.demo.ecom.service.IRoleService;
+import com.demo.ecom.service.IUserSessionService;
+import com.demo.ecom.util.DateTimeUtility;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/v1/drivers")
 public class DriverController extends BaseController {
@@ -39,39 +62,65 @@ public class DriverController extends BaseController {
 	@Autowired
 	ServletContext context;
 	
-	private static final String path = "/home/tmn/public/Ecommerce/Images";
-
+	@Autowired
+	PasswordEncoder passcodeEncoder;
+	
+	@Autowired
+	IRoleService roleService;
+	
+	@Autowired
+	IUserSessionService userSessionService;
+	
+	@Autowired
+	AuthenticationManager authManager;
+	
+	@Autowired
+	JwtUtils jwtUtils;
+	
+	private String path = DateTimeUtility.getSystemPhotoPath()+ "/drivers/";
+	final String roleName = "Driver";
+	
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public synchronized ResponseEntity<Object> saveDriver(@RequestParam("file") MultipartFile file,
 			@RequestParam("driver") String driver)
 			throws JsonMappingException, JsonProcessingException, DemoBasedException {
+		File serverFile = null;
 		try {
-			Driver d = new ObjectMapper().readValue(driver, Driver.class);
-			System.out.println(d);
-			boolean pathExists = new File(path+ "/Drivers").exists();
+			System.out.println("save driver :"+file.getOriginalFilename() + " : " + driver );
+			
+			Gson gson = new Gson();
+			DriverRequest d = gson.fromJson(driver, DriverRequest.class);
+			System.out.println(d.toString());
+			boolean pathExists = new File(path).exists();
 			if (!pathExists) {
-				new File(path+ "/Drivers").mkdir();
+				new File(path).mkdir();
 			} else {
-				new File(path+ "/Drivers/" + d.getName()).mkdir();
+				new File(path + d.getName()).mkdir();
 			}
 			
 			String originalFileName = file.getOriginalFilename();
 			String newFileName = FilenameUtils.getBaseName(originalFileName) + "."
 					+ FilenameUtils.getExtension(originalFileName);
-			File serverFile = new File(path+ "/Drivers/" + d.getName()  + File.separator + newFileName);
-			System.out.println("Server File :"+serverFile) ;
+			serverFile = new File(path + d.getName()  + File.separator + newFileName);
 			try {
 				FileUtils.writeByteArrayToFile(serverFile, file.getBytes());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
-			d.setImageName(newFileName);
-			return successResponse(driverService.saveData(d));
+			
+			Role role = roleService.findByName(roleName);
+			Driver savedDriver = new Driver(d);
+			savedDriver.setPassword(passcodeEncoder.encode(d.getPassword()));
+			savedDriver.setImageName(serverFile.toString());
+			savedDriver.setRole(role);
+			System.out.println(savedDriver);
+			return successResponse(driverService.saveData(savedDriver));
 		} catch (DemoBasedException e) {
+			// TODO server file remove
+			serverFile.delete();	
 			logError(e, e.getMessage());
 			return e.response();
-		}
+		} 
 	}
 	
 	@ApiOperation(value = "Get All Drivers",response = Iterable.class, tags = "getAllDrivers")
@@ -108,6 +157,96 @@ public class DriverController extends BaseController {
 		try {
 			driverService.deleteById(id);
 			return deleteSuccessResponse("Delete successful");
+		} catch (DemoBasedException e) {
+			logError(e, e.getMessage());
+			return e.response();
+		}
+	}
+	
+	@RequestMapping(method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
+	public synchronized ResponseEntity<Object> getDriverById(@PathVariable("id") long id){
+		try {
+		Driver d = this.driverService.getDataById(id);
+		System.out.println(" Driver : "+ d);
+		return successResponse(d);
+		}catch(DemoBasedException e) {
+			logError(e, e.getMessage());
+			return e.response();
+		}
+	}
+	
+	@PostMapping("/login")
+	public synchronized ResponseEntity<Object> login(@RequestParam(name = "phone") String phone,
+			@RequestParam(name = "password") String password) throws Exception {
+		try {
+			logInfo("Driver login");
+			String ipAddress = InetAddress.getLocalHost().getHostAddress();
+			Driver driver = driverService.login(phone, password);
+			System.out.println("Driver "+ driver);
+			JwtResponse jwtResponse = new JwtResponse();
+			List<String> roles = new ArrayList<>();
+
+			UserSession searchedUserSession = userSessionService.getUserSessionByPhoneandIPAddress(phone, ipAddress);
+			if (searchedUserSession != null) {
+				Date currentTime = new Date();
+
+				Date expiredTime = new Date(searchedUserSession.getExpireTime());
+
+				if (!currentTime.after(expiredTime)) {
+					jwtResponse.setId(driver.getId());
+					jwtResponse.setUsername(driver.getName());
+					jwtResponse.setPhone(driver.getPhone());
+					jwtResponse.setToken(searchedUserSession.getToken());
+					roles.add(searchedUserSession.getRole());
+					jwtResponse.setRoles(roles);
+					return successResponse(jwtResponse);
+				} else {
+					userSessionService.deleteById(searchedUserSession.getId());
+				}
+			}
+			System.out.println(" driver : "+ driver.getName() + password);
+			Authentication authentication = authManager
+					.authenticate(new UsernamePasswordAuthenticationToken(driver.getName().concat("&&"+driver.getRole().getName()), password));
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			
+			String jwt = jwtUtils.generateTokenForDriver(authentication);
+			System.out.println("jwt : " + jwt);
+			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+			roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toList());
+
+			jwtResponse.setId(driver.getId());
+			jwtResponse.setUsername(driver.getName());
+			jwtResponse.setPhone(driver.getPhone());
+			jwtResponse.setToken(jwt);
+			jwtResponse.setRoles(roles);
+
+			UserSession newUserSession = new UserSession();
+			newUserSession.setUsername(driver.getName());
+			newUserSession.setPhone(driver.getPhone());
+			newUserSession.setToken(jwt);
+			newUserSession.setIpAddress(ipAddress);
+			newUserSession.setRole(roles.get(0));
+			newUserSession.setLoginTime(System.currentTimeMillis());
+			newUserSession.setExpireTime(System.currentTimeMillis() + 3600000);
+			userSessionService.saveData(newUserSession);
+
+			return successResponse(jwtResponse);
+		} catch (DemoBasedException e) {
+			logError(e, e.getMessage());
+			return e.response();
+		}
+	}
+	
+	@RequestMapping(value = "/resetpassword", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public synchronized ResponseEntity<Object> resetPassword(@RequestParam(name = "phone") String phone,
+			@RequestParam(name = "password") String password)
+			throws Exception {
+		try {
+			System.out.println(phone + " : " + password );
+			driverService.resetPassword(phone, passcodeEncoder.encode(password));
+			Map<String, Object> response = new HashMap<>();
+			response.put("message", "Password Updated Successfully");
+			return successResponse(response);
 		} catch (DemoBasedException e) {
 			logError(e, e.getMessage());
 			return e.response();

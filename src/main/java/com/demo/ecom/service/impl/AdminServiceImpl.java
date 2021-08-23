@@ -10,6 +10,7 @@ import com.demo.ecom.entity.Admin;
 import com.demo.ecom.exception.NotFoundException;
 import com.demo.ecom.exception.BadRequestException;
 import com.demo.ecom.repository.AdminRepostiory;
+import com.demo.ecom.repository.DriverRepository;
 import com.demo.ecom.service.IAdminService;
 
 @Service
@@ -17,6 +18,9 @@ public class AdminServiceImpl implements IAdminService {
 
 	@Autowired
 	AdminRepostiory adminRepo;
+	
+	@Autowired
+	DriverRepository driverRepo;
 	
 	@Autowired
 	PasswordEncoder encoder;
@@ -57,8 +61,6 @@ public class AdminServiceImpl implements IAdminService {
 		adminRepo.deleteAll();
 	}
 	
-	
-
 	@Override
 	public Admin login(String email, String password) {
 		Admin admin = adminRepo.findByEmail(email).orElseThrow(() -> new NotFoundException("Admin Not Found! " + email));
@@ -70,7 +72,7 @@ public class AdminServiceImpl implements IAdminService {
 
 	@Override
 	public void resetPassword(String email, String password) {
-		Admin searchAdmin = adminRepo.findByEmail(email).orElseThrow(() -> new NotFoundException("Admin Not Found! " + email));;
+		Admin searchAdmin = adminRepo.findByEmail(email).orElseThrow(() -> new NotFoundException("Admin Not Found! " + email));
 		searchAdmin.setPassword(password);
 		searchAdmin.setCreated_date(searchAdmin.getCreated_date());
 		searchAdmin.setUpdated_date(System.currentTimeMillis());

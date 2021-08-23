@@ -17,7 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -64,6 +63,7 @@ public class AdminController extends BaseController {
 	IUserSessionService userSessionService;
 
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	//@PreAuthorize("hasRole('Admin')")
 	public synchronized ResponseEntity<Object> getAllDatas() {
 		logInfo("Get All Admins");
 		return successResponse(adminService.getAllDatas());
@@ -73,7 +73,7 @@ public class AdminController extends BaseController {
 	public synchronized ResponseEntity<Object> saveAdmin(@RequestBody AdminRequest request) {
 		logInfo("save admin");
 		try {
-			Role role = roleService.getDataById(request.getRoleId());
+			Role role = roleService.getDataById(request.getRoleId()).join();
 			Admin admin = new Admin(request);
 			admin.setPassword(passcodeEncoder.encode(request.getPassword()));
 			admin.setRole(role);
@@ -88,7 +88,7 @@ public class AdminController extends BaseController {
 	public synchronized ResponseEntity<Object> editAdmin(@RequestBody AdminRequest adminRequest) {
 		logInfo("edit admin" + adminRequest);
 		try {
-			Role role = roleService.getDataById(adminRequest.getRoleId());
+			Role role = roleService.getDataById(adminRequest.getRoleId()).join();
 			Admin admin = new Admin(adminRequest);
 			admin.setId(adminRequest.getId());
 			admin.setRole(role);
@@ -132,7 +132,7 @@ public class AdminController extends BaseController {
 			@ApiResponse(code = 401, message = "not authorized!"), @ApiResponse(code = 403, message = "forbidden!!"),
 			@ApiResponse(code = 404, message = "not found!!") })
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
-	// @PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('ADMIN')")
 	public synchronized ResponseEntity<Object> getAdminById(@PathVariable("id") Long id) {
 		logInfo("Get Admin By Id");
 		try {
@@ -143,17 +143,20 @@ public class AdminController extends BaseController {
 		}
 	}
 
-	@PostMapping("/login")
-	public synchronized ResponseEntity<Object> authenticateUser(@RequestParam(name = "email") String email,
+	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, value = "/login")
+	public synchronized ResponseEntity<Object> login(@RequestParam(name = "email") String email,
 			@RequestParam(name = "password") String password) throws Exception {
 		try {
 			String ipAddress = InetAddress.getLocalHost().getHostAddress();
 			Admin admin = adminService.login(email, password);
-
+			System.out.println("Admin " + admin);
+			
 			JwtResponse jwtResponse = new JwtResponse();
 			List<String> roles = new ArrayList<>();
+			System.out.println("IP : "+ipAddress);
 
 			UserSession searchedUserSession = userSessionService.getUserSessionByEmailandIPAddress(email, ipAddress);
+			System.out.println("User session " + searchedUserSession);
 			if (searchedUserSession != null) {
 				Date currentTime = new Date();
 
@@ -171,13 +174,14 @@ public class AdminController extends BaseController {
 					userSessionService.deleteById(searchedUserSession.getId());
 				}
 			}
+			
+			System.out.println(admin.getName().concat("&&" +admin.getRole().getName()) + " : " + password);
 			Authentication authentication = authManager
-					.authenticate(new UsernamePasswordAuthenticationToken(admin.getName(), password));
+					.authenticate(new UsernamePasswordAuthenticationToken(admin.getName().concat("&&" +admin.getRole().getName()), password));
 
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
-			String jwt = jwtUtils.generateToken(authentication);
-
+			String jwt = jwtUtils.generateTokenForAdmin(authentication);
 			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 			roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toList());
 
@@ -194,7 +198,7 @@ public class AdminController extends BaseController {
 			newUserSession.setIpAddress(ipAddress);
 			newUserSession.setRole(roles.get(0));
 			newUserSession.setLoginTime(System.currentTimeMillis());
-			newUserSession.setExpireTime(System.currentTimeMillis() + 300000);
+			newUserSession.setExpireTime(System.currentTimeMillis() + 3600000);
 			userSessionService.saveData(newUserSession);
 
 			return successResponse(jwtResponse);
@@ -221,11 +225,13 @@ public class AdminController extends BaseController {
 			return e.response();
 		}
 	}
-	
+
 	@RequestMapping(value = "/resetpassword", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public synchronized ResponseEntity<Object> resetPassword(@RequestParam(name = "email") String email, @RequestParam(name = "password") String password) throws Exception {
+	public synchronized ResponseEntity<Object> resetPassword(@RequestParam(name = "email") String email,
+			@RequestParam(name = "password") String password)
+			throws Exception {
 		try {
-			adminService.resetPassword(email,passcodeEncoder.encode(password));
+			adminService.resetPassword(email, passcodeEncoder.encode(password));
 			Map<String, Object> response = new HashMap<>();
 			response.put("message", "Password Updated Successfully");
 			return successResponse(response);

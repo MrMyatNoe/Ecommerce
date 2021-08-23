@@ -3,11 +3,13 @@ package com.demo.ecom.entity;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.demo.ecom.request.CarRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 
@@ -20,27 +22,37 @@ public class Car {
 
 	@NotNull
 	private String carNo;
-
+	
+	
+	@NotNull
+	private String brand;
+	
 	@NotNull
 	private String name;
 
 	@NotNull
-	private String modelYear;
+	private int modelYear;
 
 	@NotNull
-	private Long startedDate;
+	private String startedDate;
 
 	private String photo;
 
 	@NotNull
 	private String color;
 
+	@NotNull
 	private String taxiNo;
+	
+	@NotNull
+	private int dailyAmount;
 
 	@NotNull
 	private String licenseDate;
 
-	@OneToMany(mappedBy = "car")
+	@OneToMany(mappedBy = "car",
+			fetch = FetchType.LAZY,
+			orphanRemoval = false)
 	@JsonIgnore
 	private List<DailyTransaction> dailyList;
 	
@@ -50,6 +62,25 @@ public class Car {
 	@JsonIgnore
 	private Long updated_date;
 
+	/**
+	 * 
+	 */
+	public Car() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public Car(CarRequest request) {
+		this.carNo = request.getCarNo();
+		this.brand = request.getBrand();
+		this.name = request.getName();
+		this.modelYear = request.getModelYear();
+		this.startedDate = request.getStartedDate();
+		this.color = request.getColor();
+		this.taxiNo = request.getTaxiNo();
+		this.dailyAmount = request.getDailyAmount();
+		this.licenseDate = request.getLicenseDate();
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -65,6 +96,14 @@ public class Car {
 	public void setCarNo(String carNo) {
 		this.carNo = carNo;
 	}
+	
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
 
 	public String getName() {
 		return name;
@@ -74,19 +113,19 @@ public class Car {
 		this.name = name;
 	}
 
-	public String getModelYear() {
+	public int getModelYear() {
 		return modelYear;
 	}
 
-	public void setModelYear(String modelYear) {
+	public void setModelYear(int modelYear) {
 		this.modelYear = modelYear;
 	}
 
-	public Long getStartedDate() {
+	public String getStartedDate() {
 		return startedDate;
 	}
 
-	public void setStartedDate(Long startedDate) {
+	public void setStartedDate(String startedDate) {
 		this.startedDate = startedDate;
 	}
 
@@ -104,6 +143,14 @@ public class Car {
 
 	public void setTaxiNo(String taxiNo) {
 		this.taxiNo = taxiNo;
+	}
+	
+	public int getDailyAmount() {
+		return dailyAmount;
+	}
+
+	public void setDailyAmount(int dailyAmount) {
+		this.dailyAmount = dailyAmount;
 	}
 
 	public String getLicenseDate() {
@@ -145,12 +192,13 @@ public class Car {
 	public void setDailyList(List<DailyTransaction> dailyList) {
 		this.dailyList = dailyList;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Car [id=" + id + ", carNo=" + carNo + ", name=" + name + ", modelYear=" + modelYear + ", startedDate="
-				+ startedDate + ", photo=" + photo + ", color=" + color + ", taxiNo=" + taxiNo + ", licenseDate="
-				+ licenseDate + ", dailyList=" + dailyList + ", created_date=" + created_date + ", updated_date="
+				+ startedDate + ", photo=" + photo + ", color=" + color + ", taxiNo=" + taxiNo 
+				+ ", dailyAmount=" + dailyAmount +", licenseDate="
+				+ licenseDate + ", created_date=" + created_date + ", updated_date="
 				+ updated_date + "]";
 	}
 

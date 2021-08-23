@@ -13,14 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.demo.ecom.entity.Category;
 import com.demo.ecom.entity.Role;
 import com.demo.ecom.exception.DemoBasedException;
 import com.demo.ecom.service.IRoleService;
-
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/v1/roles")
@@ -32,14 +27,23 @@ public class RoleController extends BaseController{
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> getAllDatas(){
 		logInfo("Get All Roles");
-		return successResponse(roleService.getAllDatas());
+		//long start = System.currentTimeMillis();
+		//List<Role> list = roleService.getAllDatas();
+		//long end = System.currentTimeMillis();
+		//System.out.println("Total time : "+ (end - start));
+		return successResponse(roleService.getAllDatas().join());
 	}
-	
+		
 	@RequestMapping(method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
-	public synchronized ResponseEntity<Object> saveAdmin(@RequestBody Role role){
+	public ResponseEntity<Object> saveRole(@RequestBody Role role){
 		logInfo("save role");
 		try {
-			return successResponse(roleService.saveData(role));
+//			long start = System.currentTimeMillis();
+//			long end = System.currentTimeMillis();
+//			System.out.println("Total time : "+ (end - start));
+			role.setCreated_date(System.currentTimeMillis());
+			role.setUpdated_date(role.getCreated_date());
+			return successResponse(roleService.saveData(role).join());
 		} catch (DemoBasedException e) {
 			logError(e, e.getMessage());
 			return e.response();
@@ -47,7 +51,7 @@ public class RoleController extends BaseController{
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	public synchronized ResponseEntity<Object> editRole(@RequestBody Role role){
+	public ResponseEntity<Object> editRole(@RequestBody Role role){
 		logInfo("edit role");
 		try {
 			return successResponse(roleService.updateData(role));
@@ -58,7 +62,7 @@ public class RoleController extends BaseController{
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE,produces = MediaType.APPLICATION_JSON_VALUE)
-	public synchronized ResponseEntity<Object> deleteRoleById(@RequestParam(name = "id") long id){
+	public ResponseEntity<Object> deleteRoleById(@RequestParam(name = "id") long id){
 		logInfo("delete role");
 		try {
 			roleService.deleteById(id);
@@ -71,16 +75,13 @@ public class RoleController extends BaseController{
 		}
 	}
 	
-	@ApiOperation(value = "Get Role By Id", response = Category.class, tags = "getRoleById")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
-			@ApiResponse(code = 401, message = "not authorized!"), @ApiResponse(code = 403, message = "forbidden!!"),
-			@ApiResponse(code = 404, message = "not found!!") })
-	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
-	// @PreAuthorize("hasRole('ADMIN')")
-	public synchronized ResponseEntity<Object> getRoleById(@PathVariable("id") Long id) {
+	@RequestMapping(method = RequestMethod.GET, 
+	        produces = MediaType.APPLICATION_JSON_VALUE, 
+	        value = "/{id}")
+	public ResponseEntity<Object> getRoleById(@PathVariable("id") Long id) {
 		logInfo("Get Role By Id");
 		try {
-			return successResponse(roleService.getDataById(id));
+			return successResponse(roleService.getDataById(id).join());
 		} catch (DemoBasedException e) {
 			logError(e, e.getMessage());
 			return e.response();

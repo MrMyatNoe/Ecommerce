@@ -5,9 +5,10 @@ import java.util.List;
 public class JwtResponse {
 
 	private String token;
-	private String type = "Bearer";
+	private String type = "Authorization";
 	private Long id;
 	private String username;
+	private String phone;
 	private String email;
 	private List<String> roles;
 	
@@ -53,6 +54,14 @@ public class JwtResponse {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public List<String> getRoles() {

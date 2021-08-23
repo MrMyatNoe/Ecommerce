@@ -1,135 +1,187 @@
 package com.demo.ecom.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.demo.ecom.request.DailyTransactionRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class DailyTransaction {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private String transactionCode;
-	private String status; // DAILY, REPAIR, ABSENT
-	private double amount = 0.0;
-	private double fee = 0.0;
-	private double totalAmount = 0.0;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String transactionCode;
+    private String startedDate;
+    private String endDate;
+    private int daily;
+    private int days;
+    private int total;
+    private int paid;
+    private int remain;
+    private String remark;
+    
+    private transient String driverName;
+    private transient String carNo;
 
-	@ManyToOne
-	@JoinColumn(name = "car_id", nullable = false)
-	private Car car;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "car_id", nullable = false)
+    @JsonIgnore
+    private Car car;
 
-	@ManyToOne
-	@JoinColumn(name = "driver_id", nullable = false)
-	private Driver driver;
-	
-	@JsonIgnore
-	private long created_date;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "driver_id", nullable = false)
+    @JsonIgnore
+    private Driver driver;
 
-	@JsonIgnore
-	private long updated_date;
-	
-	public DailyTransaction() {}
-	
-	public DailyTransaction(DailyTransactionRequest request) {
-		this.status = request.getStatus();
-		this.amount = request.getAmount();
-		this.fee = request.getFee();
-		System.out.println("this is enity constructor" + this.status + " " + this.amount + " " + this.getFee());
-	}
+    @JsonIgnore
+    private long created_date;
 
-	public Long getId() {
-		return id;
-	}
+    @JsonIgnore
+    private long updated_date;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public DailyTransaction() {
+    }
 
-	public String getTransactionCode() {
-		return transactionCode;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setTransactionCode(String transactionCode) {
-		this.transactionCode = transactionCode;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getStatus() {
-		return status;
-	}
+    public String getTransactionCode() {
+        return transactionCode;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public void setTransactionCode(String transactionCode) {
+        this.transactionCode = transactionCode;
+    }
 
-	public double getAmount() {
-		return amount;
-	}
+    public String getStartedDate() {
+        return startedDate;
+    }
 
-	public void setAmount(double amount) {
-		this.amount = amount;
-	}
+    public void setStartedDate(String startedDate) {
+        this.startedDate = startedDate;
+    }
 
-	public double getFee() {
-		return fee;
-	}
+    public String getEndDate() {
+        return endDate;
+    }
 
-	public void setFee(double fee) {
-		this.fee = fee;
-	}
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
 
-	public double getTotalAmount() {
-		return totalAmount;
-	}
+    public int getDaily() {
+        return daily;
+    }
 
-	public void setTotalAmount(double totalAmount) {
-		this.totalAmount = totalAmount;
-	}
+    public void setDaily(int daily) {
+        this.daily = daily;
+    }
 
-	public Car getCar() {
-		return car;
-	}
+    public int getDays() {
+        return days;
+    }
 
-	public void setCar(Car car) {
-		this.car = car;
-	}
+    public void setDays(int days) {
+        this.days = days;
+    }
 
-	public Driver getDriver() {
-		return driver;
-	}
+    public int getTotal() {
+        return total;
+    }
 
-	public void setDriver(Driver driver) {
-		this.driver = driver;
-	}
-	
-	public long getCreated_date() {
-		return created_date;
-	}
+    public void setTotal(int total) {
+        this.total = total;
+    }
 
-	public void setCreated_date(long created_date) {
-		this.created_date = created_date;
-	}
+    public int getPaid() {
+        return paid;
+    }
 
-	public long getUpdated_date() {
-		return updated_date;
-	}
+    public void setPaid(int paid) {
+        this.paid = paid;
+    }
 
-	public void setUpdated_date(long updated_date) {
-		this.updated_date = updated_date;
-	}
+    public int getRemain() {
+        return remain;
+    }
 
-	@Override
-	public String toString() {
-		return "DailyTransaction [id=" + id + ", transactionCode=" + transactionCode + ", status=" + status
-				+ ", amount=" + amount + ", fee=" + fee + ", totalAmount=" + totalAmount + ", car=" + car + ", driver="
-				+ driver + ", created_date=" + created_date + ", updated_date=" + updated_date + "]";
-	}
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public void setRemain(int remain) {
+        this.remain = remain;
+    }
+    
+    public String getDriverName() {
+        return driverName;
+    }
+
+    public void setDriverName(String driverName) {
+        this.driverName = driverName;
+    }
+
+    public String getCarNo() {
+        return carNo;
+    }
+
+    public void setCarNo(String carNo) {
+        this.carNo = carNo;
+    }
+
+    public Car getCar() {
+        return car;
+    }
+
+    public void setCar(Car car) {
+        this.car = car;
+    }
+
+    public Driver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
+    }
+
+    public long getCreated_date() {
+        return created_date;
+    }
+
+    public void setCreated_date(long created_date) {
+        this.created_date = created_date;
+    }
+
+    public long getUpdated_date() {
+        return updated_date;
+    }
+
+    public void setUpdated_date(long updated_date) {
+        this.updated_date = updated_date;
+    }
+
+    @Override
+    public String toString() {
+        return "DailyTransaction [id=" + id + ", transactionCode=" + transactionCode + ", startedDate=" + startedDate
+                + ", endDate=" + endDate + ", daily=" + daily + ", days=" + days + ", total=" + total + ", paid=" + paid
+                + ", remain=" + remain + ", remark=" + remark + ", created_date=" + created_date + ", updated_date="
+                + updated_date + "]";
+    }
 
 }
