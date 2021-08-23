@@ -1,6 +1,6 @@
 # Car Management Project with MySQL
 
-Backend Project for Car Management System, for daily transaction between Admins and Drivers, Car Maintence & Leave for Driver
+Backend Project for Car Management System, for daily transaction between Admins and Drivers,Car Maintence & Leave for Driver
 
 *First You must install at least jdk 8 on your pc*
 
