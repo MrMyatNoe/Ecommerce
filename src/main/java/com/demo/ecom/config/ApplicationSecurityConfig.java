@@ -76,7 +76,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter{
 //	        .csrf()
 //	        .disable()
 //	        .authorizeRequests().anyRequest().permitAll();
-//		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
 	}
 
