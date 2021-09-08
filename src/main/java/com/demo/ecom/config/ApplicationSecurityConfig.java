@@ -21,35 +21,35 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true) 
-public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter{
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	UserDetailsServiceImpl userDetailsService;
-	
-	@Override
-	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-	}
+    @Autowired
+    UserDetailsServiceImpl userDetailsService;
 
-	@Override
-	@Bean
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
-	}
-	
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-	
-	@Bean
-	public AuthTokenFilter authenticationJwtTokenFilter() {
-		return new AuthTokenFilter();
-	}
-	
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
+    @Override
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }
+
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthTokenFilter authenticationJwtTokenFilter() {
+        return new AuthTokenFilter();
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
 		http.cors()
 			.and()
 			.csrf()
@@ -63,22 +63,19 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter{
 			.antMatchers(HttpMethod.POST,"/v1/drivers/login").permitAll()
 			.antMatchers("/v1/admins").permitAll()
 			.antMatchers("/v1/drivers").permitAll()
-			.antMatchers("/v1/roles").permitAll()
+			.antMatchers("/v1/roles").hasAuthority("Admin")
 			.antMatchers("/v1/cars").permitAll()
 			.antMatchers("/v1/dailyTransactions").permitAll()
 			.antMatchers("/v1/tutorials").permitAll()
 			.antMatchers("/error").permitAll()
 			.anyRequest().authenticated();
 
-//	    http
-//	        .cors()
-//	        .and()
-//	        .csrf()
-//	        .disable()
-//	        .authorizeRequests().anyRequest().permitAll();
-		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+//        http.cors().and().csrf().disable().exceptionHandling().and()
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
+//                .anyRequest().permitAll();
+         http.addFilterBefore(authenticationJwtTokenFilter(),UsernamePasswordAuthenticationFilter.class);
 
-	}
+    }
 
 //	@Override
 //	@Bean
@@ -99,5 +96,4 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter{
 //		return new InMemoryUserDetailsManager(tmnUser,driverUser);
 //	}
 
-	
 }
