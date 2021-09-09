@@ -1,7 +1,5 @@
 package com.demo.ecom.controller.rest;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -65,7 +63,10 @@ public class DailyTransactionController extends BaseController {
             dt.setDays(request.getDay());
             dt.setTotal(request.getTotal());
             dt.setStartedDate(request.getStartedDate());
-            dt.setRemark(request.getRemark());
+            if(request.getRemark().equals("") || request.getRemark()==null)
+                dt.setRemark(DateTimeUtility.remarkForDaily);
+            else
+                dt.setRemark(request.getRemark());
             dt.setEndDate(request.getEndDate());
             return successResponse(dailyTransactionService.saveData(dt));
         } catch (DemoBasedException e) {
@@ -83,14 +84,7 @@ public class DailyTransactionController extends BaseController {
             @RequestParam(name = "size") int size) {
         try {
             logInfo("Get All Daily By title or Page And Size");
-            List<DailyTransaction> list = dailyTransactionService.getDatasByPageAndSize(page, size);
-            for (DailyTransaction dailyTransaction : list) {
-                dailyTransaction.setCarNo(dailyTransaction.getCar().getCarNo());
-                dailyTransaction.setDriverName(dailyTransaction.getDriver().getName());
-                if (dailyTransaction.getRemark() == null)
-                    dailyTransaction.setRemark(DateTimeUtility.remarkForDaily);
-            }
-            return successResponse(list);
+            return successResponse(dailyTransactionService.getDatasByPageAndSize(page, size));
         } catch (DemoBasedException e) {
             logError(e, e.getMessage());
             return e.response();
