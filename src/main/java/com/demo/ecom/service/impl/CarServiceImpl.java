@@ -38,6 +38,7 @@ public class CarServiceImpl implements ICarService {
 
 	@Override
 	public void deleteById(long id) {
+		getDataById(id);
 		this.carRepo.deleteById(id);
 	}
 

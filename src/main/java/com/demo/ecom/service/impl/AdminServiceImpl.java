@@ -47,6 +47,7 @@ public class AdminServiceImpl implements IAdminService {
 
 	@Override
 	public void deleteById(long id) {
+		getDataById(id);
 		adminRepo.deleteById(id);
 	}
 

@@ -55,6 +55,7 @@ public class DailyTransactionImpl implements IDailyTransactionService {
 
 	@Override
 	public void deleteById(long id) {
+		getDataById(id);
 		dailyTransRepo.deleteById(id);
 	}
 
@@ -64,7 +65,8 @@ public class DailyTransactionImpl implements IDailyTransactionService {
         Page<DailyTransaction> pages = dailyTransRepo.findAll(PageRequest.of(page, size));
    
         List<DailyTransaction> list = pages.getContent();
-        System.out.println(list.size());
+		list.stream().forEach(dailyTransaction -> { dailyTransaction.setCarNo(dailyTransaction.getCar().getCarNo());
+			dailyTransaction.setDriverName(dailyTransaction.getDriver().getName()); });
         return list;
     }
 	

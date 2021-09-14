@@ -83,7 +83,7 @@ public class DailyTransactionController extends BaseController {
     public ResponseEntity<Object> getDailysByPageAndSize(@RequestParam(name = "page") int page,
             @RequestParam(name = "size") int size) {
         try {
-            logInfo("Get All Daily By title or Page And Size");
+            logInfo("Get All Daily By Page And Size");
             return successResponse(dailyTransactionService.getDatasByPageAndSize(page, size));
         } catch (DemoBasedException e) {
             logError(e, e.getMessage());
