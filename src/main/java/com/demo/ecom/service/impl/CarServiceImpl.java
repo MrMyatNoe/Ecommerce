@@ -13,6 +13,8 @@ import com.demo.ecom.service.ICarService;
 @Service
 public class CarServiceImpl implements ICarService {
 
+    private static final String CAR_REGEX = "\\b([A-E][/]\\d{5}[/]\\d{2})\\b";
+    
 	@Autowired
 	CarRepository carRepo;
 

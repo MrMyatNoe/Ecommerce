@@ -62,6 +62,12 @@ public class Car {
 	@JsonIgnore
 	private List<Maintenance> maintainList;
 	
+	@OneToMany(mappedBy = "car",
+            fetch = FetchType.LAZY,
+            orphanRemoval = false)
+    @JsonIgnore
+    private List<Leave> leaveList;
+	
 	@JsonIgnore
 	private Long created_date;
 
@@ -199,11 +205,25 @@ public class Car {
 		this.dailyList = dailyList;
 	}
 
+	
+	public List<Maintenance> getMaintainList() {
+        return maintainList;
+    }
+
 	public void setMaintainList(List<Maintenance> maintainList) {
 		this.maintainList = maintainList;
 	}
+	
 
-	@Override
+	public List<Leave> getLeaveList() {
+        return leaveList;
+    }
+
+    public void setLeaveList(List<Leave> leaveList) {
+        this.leaveList = leaveList;
+    }
+
+    @Override
 	public String toString() {
 		return "Car [id=" + id + ", carNo=" + carNo + ", name=" + name + ", modelYear=" + modelYear + ", startedDate="
 				+ startedDate + ", photo=" + photo + ", color=" + color + ", taxiNo=" + taxiNo 

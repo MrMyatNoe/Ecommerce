@@ -41,7 +41,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @RestController
-@RequestMapping("v1/admins")
+@RequestMapping("/v1/admins")
 public class AdminController extends BaseController {
 
 	@Autowired

@@ -1,7 +1,6 @@
 package com.demo.ecom.service.impl;
 
 import com.demo.ecom.entity.Car;
-import com.demo.ecom.entity.DailyTransaction;
 import com.demo.ecom.entity.Maintenance;
 import com.demo.ecom.exception.NotFoundException;
 import com.demo.ecom.repository.MaintenanceRepository;
