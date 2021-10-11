@@ -41,7 +41,7 @@ public class TutorialController extends BaseController {
 			@ApiResponse(code = 401, message = "not authorized!"), @ApiResponse(code = 403, message = "forbidden!!"),
 			@ApiResponse(code = 404, message = "not found!!") })
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public synchronized ResponseEntity<Object> getTutotrialsByPageAndSize(@RequestParam(required = false) String title,
+	public ResponseEntity<Object> getTutotrialsByPageAndSize(@RequestParam(required = false) String title,
 			@RequestParam(name = "page") int page, @RequestParam(name = "size") int size) {
 		try {
 			logInfo("Get All Tutorials By title or Page And Size");

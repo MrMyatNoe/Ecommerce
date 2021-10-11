@@ -174,7 +174,7 @@ public class AdminController extends BaseController {
 					userSessionService.deleteById(searchedUserSession.getId());
 				}
 			}
-			
+			System.out.println("hello");
 			System.out.println(admin.getName().concat("&&" +admin.getRole().getName()) + " : " + password);
 			Authentication authentication = authManager
 					.authenticate(new UsernamePasswordAuthenticationToken(admin.getName().concat("&&" +admin.getRole().getName()), password));
