@@ -53,6 +53,7 @@ public class DriverServiceImpl implements IDriverService {
 
 	@Override
 	public void deleteById(long id) {
+		getDataById(id);
 		this.driverRepo.deleteById(id);
 	}
 

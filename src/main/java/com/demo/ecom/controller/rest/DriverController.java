@@ -40,6 +40,7 @@ import com.demo.ecom.exception.DemoBasedException;
 import com.demo.ecom.request.DriverRequest;
 import com.demo.ecom.response.JwtResponse;
 import com.demo.ecom.service.IDriverService;
+import com.demo.ecom.service.IFileService;
 import com.demo.ecom.service.IRoleService;
 import com.demo.ecom.service.IUserSessionService;
 import com.demo.ecom.util.DateTimeUtility;
@@ -77,7 +78,10 @@ public class DriverController extends BaseController {
 	@Autowired
 	JwtUtils jwtUtils;
 	
-	private String path = DateTimeUtility.getSystemPhotoPath()+ "/drivers/";
+	@Autowired
+	IFileService fileService;
+	
+	private String path = DateTimeUtility.getSystemPhotoPath()+ "/Drivers/";
 	final String roleName = "Driver";
 	
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -111,7 +115,7 @@ public class DriverController extends BaseController {
 			Role role = roleService.findByName(roleName);
 			Driver savedDriver = new Driver(d);
 			savedDriver.setPassword(passcodeEncoder.encode(d.getPassword()));
-			savedDriver.setImageName(serverFile.toString());
+			savedDriver.setImageName(file.getOriginalFilename()+ System.currentTimeMillis());
 			savedDriver.setRole(role);
 			System.out.println(savedDriver);
 			return successResponse(driverService.saveData(savedDriver));
@@ -135,20 +139,6 @@ public class DriverController extends BaseController {
 		logInfo("Get All Drivers");
 		return successResponse(driverService.getAllDatas());
 	}
-	
-//	@RequestMapping(method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-//	public ResponseEntity<Object> deleteAllDatas(){
-//		logInfo("delete all");
-//		try {
-//			driverService.deleteAll();
-//			Map<String, Object> response = new HashMap<>();
-//			response.put("message", "Delete Successful");
-//			return deleteSuccessResponse(response);
-//		} catch (DemoBasedException e) {
-//			logError(e, e.getMessage());
-//			return e.response();
-//		}
-//	}
 	
 	@RequestMapping(method = RequestMethod.DELETE ,produces = MediaType.APPLICATION_JSON_VALUE)
 	//@PreAuthorize("hasRole('ADMIN')")
@@ -252,4 +242,23 @@ public class DriverController extends BaseController {
 			return e.response();
 		}
 	}
+	
+	/***
+     * 
+     * @param filename ( filename with extension .jpg)
+     * @return if filename exists return file image, if not No Image Available.JPG
+     * @throws IOException
+     */
+    @RequestMapping(path = "/images", method = RequestMethod.GET)
+    public synchronized ResponseEntity<Object> loadImage() throws IOException {
+        logInfo("Entering get image file: ");
+        return successResponse("hello");
+//        try {
+//            return fileService.load(filename);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            Resource file = fileService.noImageLoad();
+//            return IOUtils.toByteArray(file.getInputStream());
+//        }
+    }
 }

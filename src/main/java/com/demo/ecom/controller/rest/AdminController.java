@@ -41,7 +41,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @RestController
-@RequestMapping("v1/admins")
+@RequestMapping("/v1/admins")
 public class AdminController extends BaseController {
 
 	@Autowired
@@ -174,7 +174,7 @@ public class AdminController extends BaseController {
 					userSessionService.deleteById(searchedUserSession.getId());
 				}
 			}
-			
+			System.out.println("hello");
 			System.out.println(admin.getName().concat("&&" +admin.getRole().getName()) + " : " + password);
 			Authentication authentication = authManager
 					.authenticate(new UsernamePasswordAuthenticationToken(admin.getName().concat("&&" +admin.getRole().getName()), password));

@@ -120,7 +120,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.example.demo</mainClass>
+					<mainClass>com.demo.ecom</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -52,6 +52,13 @@ public class Driver{
 			orphanRemoval = false)
 	@JsonIgnore
 	private List<DailyTransaction> dailyList;
+	
+	@OneToMany(mappedBy = "driver",
+            fetch = FetchType.LAZY, 
+            cascade = CascadeType.ALL,
+            orphanRemoval = false)
+    @JsonIgnore
+    private List<Leave> leaveList;
 
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -184,7 +191,15 @@ public class Driver{
 		this.dailyList = dailyList;
 	}
 	
-	@Override
+	public List<Leave> getLeaveList() {
+        return leaveList;
+    }
+
+    public void setLeaveList(List<Leave> leaveList) {
+        this.leaveList = leaveList;
+    }
+
+    @Override
 	public String toString() {
 		return "Driver [id=" + id + ", name=" + name + ", nrc=" + nrc + ", license=" + license + ", gender=" + gender
 				+ ", address=" + address + ", phone=" + phone + ", password=" + password + ", imageName=" + imageName

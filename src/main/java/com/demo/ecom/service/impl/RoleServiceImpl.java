@@ -45,6 +45,7 @@ public class RoleServiceImpl implements IRoleService {
 
 	@Override
 	public void deleteById(long id) {
+		getDataById(id);
 		roleRepo.deleteById(id);
 	}
 

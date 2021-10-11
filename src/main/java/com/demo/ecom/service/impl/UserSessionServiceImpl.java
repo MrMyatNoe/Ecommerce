@@ -2,6 +2,7 @@ package com.demo.ecom.service.impl;
 
 import java.util.List;
 
+import com.demo.ecom.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,13 +41,13 @@ public class UserSessionServiceImpl implements IUserSessionService{
 
 	@Override
 	public void deleteById(long id) {
-		this.userSessionRepository.deleteById(id);
+		getDataById(id);
+		userSessionRepository.deleteById(id);
 	}
 
 	@Override
 	public UserSession getDataById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return userSessionRepository.findById(id).orElseThrow(() -> new NotFoundException("User Session Not Found!" + id));
 	}
 
 	@Override

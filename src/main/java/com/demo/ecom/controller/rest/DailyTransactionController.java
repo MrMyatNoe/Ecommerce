@@ -22,10 +22,6 @@ import com.demo.ecom.service.IDailyTransactionService;
 import com.demo.ecom.service.IDriverService;
 import com.demo.ecom.util.DateTimeUtility;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-
 @RestController
 @RequestMapping("/v1/dailyTransactions")
 public class DailyTransactionController extends BaseController {
@@ -39,16 +35,17 @@ public class DailyTransactionController extends BaseController {
     @Autowired
     IDriverService driverService;
 
-//	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<Object> getAllDatas(){
-//        logInfo("Get All Daily");
-//        List<DailyTransaction> list = dailyTransactionService.getAllDatas().join();
-//        for (DailyTransaction dailyTransaction : list) {
-//            dailyTransaction.setCarNo(dailyTransaction.getCar().getCarNo());
-//            dailyTransaction.setDriverName(dailyTransaction.getDriver().getName());
-//        }
-//        return successResponse(list);
-//    }
+	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> getAllDatas(){
+        logInfo("Get All Daily");
+        List<DailyTransaction> list = dailyTransactionService.getAllDatas();
+        list.stream()
+            .forEach(dailyTransaction -> 
+                    { dailyTransaction.setCarNo(dailyTransaction.getCar().getCarNo());
+                      dailyTransaction.setDriverName(dailyTransaction.getDriver().getName()); 
+                     });
+        return successResponse(list);
+    }
 
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> saveTransaction(@RequestBody DailyTransactionRequest request) {
@@ -65,7 +62,10 @@ public class DailyTransactionController extends BaseController {
             dt.setDays(request.getDay());
             dt.setTotal(request.getTotal());
             dt.setStartedDate(request.getStartedDate());
-            dt.setRemark(request.getRemark());
+            if(request.getRemark().equals("") || request.getRemark()==null)
+                dt.setRemark(DateTimeUtility.remarkForDaily);
+            else
+                dt.setRemark(request.getRemark());
             dt.setEndDate(request.getEndDate());
             return successResponse(dailyTransactionService.saveData(dt));
         } catch (DemoBasedException e) {
@@ -74,33 +74,11 @@ public class DailyTransactionController extends BaseController {
         }
     }
 
-    @ApiOperation(value = "Get All Daily", response = Iterable.class, tags = "getDailyByPageAndSize")
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
-            @ApiResponse(code = 401, message = "not authorized!"), @ApiResponse(code = 403, message = "forbidden!!"),
-            @ApiResponse(code = 404, message = "not found!!") })
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> getDailysByPageAndSize(@RequestParam(name = "page") int page,
-            @RequestParam(name = "size") int size) {
-        try {
-            logInfo("Get All Daily By title or Page And Size");
-            List<DailyTransaction> list = dailyTransactionService.getDatasByPageAndSize(page, size);
-            for (DailyTransaction dailyTransaction : list) {
-                dailyTransaction.setCarNo(dailyTransaction.getCar().getCarNo());
-                dailyTransaction.setDriverName(dailyTransaction.getDriver().getName());
-                if (dailyTransaction.getRemark() == null)
-                    dailyTransaction.setRemark(DateTimeUtility.remarkForDaily);
-            }
-            return successResponse(list);
-        } catch (DemoBasedException e) {
-            logError(e, e.getMessage());
-            return e.response();
-        }
-    }
-
+    
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
     public ResponseEntity<Object> getDataById(@PathVariable("id") Long id) {
         logInfo("Get Daily Transaction By Id");
-        return successResponse(dailyTransactionService.getDataById(id).join());
+        return successResponse(dailyTransactionService.getDataById(id));
     }
 
     @RequestMapping(method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -112,7 +90,7 @@ public class DailyTransactionController extends BaseController {
             Driver driver = driverService.getDataById(request.getDriverId());
             dt.setCar(car);
             dt.setDriver(driver);
-            return successResponse(dailyTransactionService.updateData(dt).join());
+            return successResponse(dailyTransactionService.updateData(dt));
         } catch (DemoBasedException e) {
             logError(e, e.getMessage());
             return e.response();

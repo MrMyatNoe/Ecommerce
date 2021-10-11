@@ -12,16 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.demo.ecom.entity.Movie;
-
-import reactor.core.publisher.Flux;
-
 /**
  * @author msi
  *
  */
 @RestController
-@RequestMapping("v1/movies")
+@RequestMapping("/v1/movies")
 public class MovieController {
 
 	@RequestMapping(method = RequestMethod.GET,

@@ -1,7 +1,6 @@
 package com.demo.ecom.service.impl;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,41 +19,43 @@ public class DailyTransactionImpl implements IDailyTransactionService {
 	DailyTransactionRepository dailyTransRepo;
 	
 	@Override
-	public CompletableFuture<DailyTransaction> saveData(DailyTransaction t) {
+	public DailyTransaction saveData(DailyTransaction t) {
 		int remain = t.getTotal() - t.getPaid();
 		t.setDaily(t.getCar().getDailyAmount());
 		t.setRemain(remain);
 		t.setCreated_date(System.currentTimeMillis());
 		t.setTransactionCode("Fee" + t.getCreated_date());
 		t.setUpdated_date(t.getCreated_date());
-		dailyTransRepo.save(t);
-		return CompletableFuture.completedFuture(t);
+		return dailyTransRepo.save(t);
+		//return CompletableFuture.completedFuture(t);
 	}
 
 	@Override
-	public CompletableFuture<DailyTransaction> updateData(DailyTransaction t) {
-		DailyTransaction dt = getDataById(t.getId()).join();
+	public DailyTransaction updateData(DailyTransaction t) {
+		DailyTransaction dt = getDataById(t.getId());
 		t.setCreated_date(dt.getCreated_date());
 		t.setUpdated_date(System.currentTimeMillis());
-		dailyTransRepo.save(t);
-		return CompletableFuture.completedFuture(t);
+		return dailyTransRepo.save(t);
+		//return CompletableFuture.completedFuture(t);
 	}
 
 	@Override
-	public CompletableFuture<List<DailyTransaction>> getAllDatas() {
-		return CompletableFuture.completedFuture(dailyTransRepo.findAll());
+	public List<DailyTransaction> getAllDatas() {
+		return dailyTransRepo.findAll();
 	}
 	
 	@Override
-	public CompletableFuture<DailyTransaction> getDataById(long id) {
-		DailyTransaction daily = dailyTransRepo
+	public DailyTransaction getDataById(long id) {
+		//DailyTransaction daily = 
+		return dailyTransRepo
 				.findById(id)
 				.orElseThrow(() -> new NotFoundException("Daily Transaction not exist" + id));
-		return CompletableFuture.completedFuture(daily);
+		//return CompletableFuture.completedFuture(daily);
 	}
 
 	@Override
 	public void deleteById(long id) {
+		getDataById(id);
 		dailyTransRepo.deleteById(id);
 	}
 
@@ -64,8 +65,14 @@ public class DailyTransactionImpl implements IDailyTransactionService {
         Page<DailyTransaction> pages = dailyTransRepo.findAll(PageRequest.of(page, size));
    
         List<DailyTransaction> list = pages.getContent();
-        System.out.println(list.size());
+		list.stream().forEach(dailyTransaction -> { dailyTransaction.setCarNo(dailyTransaction.getCar().getCarNo());
+			dailyTransaction.setDriverName(dailyTransaction.getDriver().getName()); });
         return list;
+    }
+
+    @Override
+    public Page<DailyTransaction> getDailysByPageAndSize(int page, int size) {
+        return dailyTransRepo.findAll(PageRequest.of(page, size));
     }
 	
 }

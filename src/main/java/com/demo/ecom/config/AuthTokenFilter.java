@@ -24,6 +24,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.demo.ecom.entity.UserSession;
 import com.demo.ecom.exception.DemoBasedException;
 import com.demo.ecom.service.IUserSessionService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -47,7 +48,6 @@ public class AuthTokenFilter extends OncePerRequestFilter{
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		try {
-			System.out.println("request "+ request);
 			String jwt = parseJwt(request);
 			if(jwt !=null && !isTokenExpired(request)){
 				String name = jwtUtils.getUserNameFromJwtToken(jwt);
@@ -66,12 +66,13 @@ public class AuthTokenFilter extends OncePerRequestFilter{
 			response.setStatus(190);
 			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 			mapper.writeValue(response.getWriter(), errorDetails);
-		} catch (ExpiredJwtException e) {
-			Map<String, Object> errorDetails = new HashMap<>();
-			errorDetails.put("message", e.getMessage());
-			response.setStatus(190); // for session expired
-			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-			mapper.writeValue(response.getWriter(), errorDetails);
+		} catch (ExpiredJwtException ex) {
+            Map<String, Object> errorDetails = new HashMap<>();
+            errorDetails.put("message", ex.getMessage());
+            response.setStatus(190);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.sendError(190, ex.getMessage());
+            mapper.writeValue(response.getWriter(), errorDetails);
 		} catch (JwtException e) {
 			e.printStackTrace();
 			Map<String, Object> errorDetails = new HashMap<>();
@@ -103,11 +104,11 @@ public class AuthTokenFilter extends OncePerRequestFilter{
 
 	private String parseJwt(HttpServletRequest request) {
 		String headerAuth = request.getHeader("Authorization");
-		System.out.println(headerAuth);
 		if(StringUtils.hasText(headerAuth)) {
 			String token = headerAuth.substring(0,headerAuth.length());
 			return token;
 		}
+		System.out.println(headerAuth);
 		return null;
 	}
 	
