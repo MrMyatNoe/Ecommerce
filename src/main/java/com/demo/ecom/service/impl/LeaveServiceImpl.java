@@ -9,8 +9,6 @@ import com.demo.ecom.service.ICarService;
 import com.demo.ecom.service.IDriverService;
 import com.demo.ecom.service.ILeaveService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -73,16 +71,16 @@ public class LeaveServiceImpl implements ILeaveService {
         return CompletableFuture.completedFuture(existedLeave);
     }
 
-    @Override
-    public List<Leave> getDatasByPageAndSize(int page, int size) {
-        System.out.println(page + " : "+ size);
-        Page<Leave> pages = repository.findAll(PageRequest.of(page, size));
-
-        List<Leave> list = pages.getContent();
-        list.stream().forEach(leave -> {leave.setCarNo(leave.getCar().getCarNo());
-        leave.setCarId(leave.getCar().getId());
-        leave.setDriverName(leave.getDriver().getName());
-        leave.setDriverId(leave.getDriver().getId());});
-        return list;
-    }
+//    @Override
+//    public List<Leave> getDatasByPageAndSize(int page, int size) {
+//        System.out.println(page + " : "+ size);
+//        Page<Leave> pages = repository.findAll(PageRequest.of(page, size));
+//
+//        List<Leave> list = pages.getContent();
+//        list.stream().forEach(leave -> {leave.setCarNo(leave.getCar().getCarNo());
+//        leave.setCarId(leave.getCar().getId());
+//        leave.setDriverName(leave.getDriver().getName());
+//        leave.setDriverId(leave.getDriver().getId());});
+//        return list;
+//    }
 }

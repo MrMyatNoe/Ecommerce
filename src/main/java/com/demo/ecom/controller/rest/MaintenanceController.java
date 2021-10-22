@@ -1,6 +1,5 @@
 package com.demo.ecom.controller.rest;
 
-import com.demo.ecom.entity.DailyTransaction;
 import com.demo.ecom.entity.Maintenance;
 import com.demo.ecom.exception.DemoBasedException;
 import com.demo.ecom.service.IMaintenanceService;
