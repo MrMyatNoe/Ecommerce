@@ -5,12 +5,14 @@ import com.demo.ecom.entity.Driver;
 import com.demo.ecom.entity.Leave;
 import com.demo.ecom.exception.NotFoundException;
 import com.demo.ecom.repository.LeaveRepository;
+import com.demo.ecom.response.LeaveResponse;
 import com.demo.ecom.service.ICarService;
 import com.demo.ecom.service.IDriverService;
 import com.demo.ecom.service.ILeaveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -69,6 +71,24 @@ public class LeaveServiceImpl implements ILeaveService {
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException("leave not exist" + id));
         return CompletableFuture.completedFuture(existedLeave);
+    }
+
+    @Override
+    public List<LeaveResponse> getLeavesByFirstDateAndLastDate(String firstDate, String lastDate) {
+        List<Leave> searchedList = repository.getLeavesByFirstDateAndLastDate(firstDate, lastDate);
+        LeaveResponse response = new LeaveResponse();
+        List<LeaveResponse> list = new ArrayList<>();
+        if(searchedList == null || searchedList.size() == 0) {
+            list.add(response);
+            return list;
+        }
+        int days = 0;
+        for (Leave leave : searchedList) {
+            days += leave.getDays();
+        }
+        response.setTotal(days);
+        list.add(response);
+        return list;
     }
 
 //    @Override
