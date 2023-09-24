@@ -7,8 +7,6 @@ import com.demo.ecom.repository.MaintenanceRepository;
 import com.demo.ecom.service.ICarService;
 import com.demo.ecom.service.IMaintenanceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -63,14 +61,14 @@ public class MaintenanceServiceImpl implements IMaintenanceService {
         return CompletableFuture.completedFuture(maintain);
     }
 
-    @Override
-    public List<Maintenance> getDatasByPageAndSize(int page, int size) {
-        System.out.println(page + " : "+ size);
-        Page<Maintenance> pages = repository.findAll(PageRequest.of(page, size));
-
-        List<Maintenance> list = pages.getContent();
-        list.stream().forEach(maintenance -> {maintenance.setCarNo(maintenance.getCar().getCarNo());
-            maintenance.setCarId(maintenance.getCar().getId());});
-        return list;
-    }
+//    @Override
+//    public List<Maintenance> getDatasByPageAndSize(int page, int size) {
+//        System.out.println(page + " : "+ size);
+//        Page<Maintenance> pages = repository.findAll(PageRequest.of(page, size));
+//
+//        List<Maintenance> list = pages.getContent();
+//        list.stream().forEach(maintenance -> {maintenance.setCarNo(maintenance.getCar().getCarNo());
+//            maintenance.setCarId(maintenance.getCar().getId());});
+//        return list;
+//    }
 }

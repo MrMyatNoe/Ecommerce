@@ -3,8 +3,6 @@ package com.demo.ecom.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.demo.ecom.entity.DailyTransaction;
@@ -59,20 +57,20 @@ public class DailyTransactionImpl implements IDailyTransactionService {
 		dailyTransRepo.deleteById(id);
 	}
 
-    @Override
-    public List<DailyTransaction> getDatasByPageAndSize(int page, int size) {
-        System.out.println(page + " : "+ size);
-        Page<DailyTransaction> pages = dailyTransRepo.findAll(PageRequest.of(page, size));
-   
-        List<DailyTransaction> list = pages.getContent();
-		list.stream().forEach(dailyTransaction -> { dailyTransaction.setCarNo(dailyTransaction.getCar().getCarNo());
-			dailyTransaction.setDriverName(dailyTransaction.getDriver().getName()); });
-        return list;
-    }
-
-    @Override
-    public Page<DailyTransaction> getDailysByPageAndSize(int page, int size) {
-        return dailyTransRepo.findAll(PageRequest.of(page, size));
-    }
+//    @Override
+//    public List<DailyTransaction> getDatasByPageAndSize(int page, int size) {
+//        System.out.println(page + " : "+ size);
+//        Page<DailyTransaction> pages = dailyTransRepo.findAll(PageRequest.of(page, size));
+//   
+//        List<DailyTransaction> list = pages.getContent();
+//		list.stream().forEach(dailyTransaction -> { dailyTransaction.setCarNo(dailyTransaction.getCar().getCarNo());
+//			dailyTransaction.setDriverName(dailyTransaction.getDriver().getName()); });
+//        return list;
+//    }
+//
+//    @Override
+//    public Page<DailyTransaction> getDailysByPageAndSize(int page, int size) {
+//        return dailyTransRepo.findAll(PageRequest.of(page, size));
+//    }
 	
 }
